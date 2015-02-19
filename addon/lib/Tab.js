@@ -3,14 +3,14 @@ var tabs = require("sdk/tabs"),
 	sessionCount = 0,
 	currentCount = 0;
 
-exports.init = function(){
+exports.init = function () {
 
-	if (typeof ss.getGlobalCount()  === 'undefined'){
+	if (typeof ss.getGlobalCount() === 'undefined') {
 		ss.setGlobalCount(0);
 	}
 
-	for each (var tab in tabs){
-		
+	for each(var tab in tabs) {
+
 		ss.setGlobalCount(ss.getGlobalCount() + 1, new Date().getTime());
 		sessionCount++;
 		currentCount++;
@@ -19,34 +19,33 @@ exports.init = function(){
 
 	// Listen for tab openings.
 	tabs.on('open', function onOpen(tab) {
-		
+
 		ss.setGlobalCount(ss.getGlobalCount() + 1, new Date().getTime());
 		sessionCount++;
 		currentCount++;
 		console.log('Global: ' + ss.getGlobalCount());
-		console.log('Session: ' + sessionCount);  
+		console.log('Session: ' + sessionCount);
 		console.log('Current: ' + currentCount);
 	});
 
 	//Listen for tab closes.
 	tabs.on('close', function onOpen(tab) {
-		
+
 		currentCount--;
 		console.log('Global: ' + ss.getGlobalCount());
-		console.log('Session: ' + sessionCount);  
+		console.log('Session: ' + sessionCount);
 		console.log('Current: ' + currentCount);
 	});
-}
+};
 
-
-exports.getGlobalCount = function(){
+exports.getGlobalCount = function () {
 	return ss.getGlobalCount();
-}
+};
 
-exports.getSessionCount = function(){
+exports.getSessionCount = function () {
 	return sessionCount;
-}
+};
 
-exports.getCurrentCount = function(){
+exports.getCurrentCount = function () {
 	return currentCount;
-}
+};

@@ -1,21 +1,21 @@
 var ss = require("sdk/simple-storage");
 
-exports.init = function(){
+exports.init = function () {
 	ss.storage.globalCount = [];
-}
+};
 
-function getGlobalCount(){
+function getGlobalCount() {
 	return ss.storage.globalCount;
 }
 
-exports.getGlobalCount = function(){
+exports.getGlobalCount = function () {
 	return getGlobalCount();
-}
+};
 
-function setGlobalCount(globalCount){
+function setGlobalCount(globalCount) {
 	ss.storage.globalCount = globalCount;
 }
 
-exports.setGlobalCount = function(globalCount){
+exports.setGlobalCount = function (globalCount) {
 	setGlobalCount(globalCount);
-}
+};
