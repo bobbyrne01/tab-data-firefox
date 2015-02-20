@@ -5,7 +5,7 @@
   "description": "Provides user with tab related stats/data",
   "author": "Robert Byrne",
   "license": "GNU GPL v3",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "permissions": {
     "private-browsing": true
   },
@@ -17,10 +17,10 @@
       "value": "1"
     },
     {
-        "name": "memoryTracking",
-        "title": "Enable memory usage tracking?",
-        "type": "bool",
-        "value": true
-      }
+      "name": "memoryTracking",
+      "title": "Enable memory usage tracking?",
+      "type": "bool",
+      "value": true
+    }
   ]
 }
