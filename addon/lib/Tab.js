@@ -100,7 +100,9 @@ exports.init = function () {
 		currentCount--;
 	});
 
-	require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+	if (Preference.get("memoryTracking")){
+		require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+	}
 };
 
 exports.getGlobalCount = function () {
@@ -127,5 +129,11 @@ function updateMemoryCounters() {
 	markedTabs = []; // reset memory counts
 	MemoryReporterManager.getReports(handleReport, null, finishReporting, null, false);
 
-	require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+	if (Preference.get("memoryTracking")){
+		require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+	}
 }
+
+exports.updateMemoryCounters = function () {
+	updateMemoryCounters();
+};

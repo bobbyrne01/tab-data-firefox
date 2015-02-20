@@ -15,6 +15,12 @@
       "title": "How many seconds between memory data collection?",
       "type": "string",
       "value": "1"
-    }
+    },
+    {
+        "name": "memoryTracking",
+        "title": "Enable memory usage tracking?",
+        "type": "bool",
+        "value": true
+      }
   ]
 }
