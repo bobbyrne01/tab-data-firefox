@@ -1,12 +1,12 @@
 {
-	"name": "tab-data-addon",
-	"title": "Tab Data",
-	"id": "jid1-4ogjq7MUzAiCOw",
-	"description": "Provides user with tab related stats/data",
-	"author": "Robert Byrne",
-	"license": "GNU GPL v3",
-	"version": "0.1.1",
-	"permissions": {
-		"private-browsing": true
-	}
+  "name": "tab-data-addon",
+  "title": "Tab Data",
+  "id": "jid1-4ogjq7MUzAiCOw",
+  "description": "Provides user with tab related stats/data",
+  "author": "Robert Byrne",
+  "license": "GNU GPL v3",
+  "version": "0.2.0",
+  "permissions": {
+    "private-browsing": true
+  }
 }
