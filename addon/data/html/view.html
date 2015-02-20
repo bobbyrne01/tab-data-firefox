@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="UTF-8" />
+	<link rel="stylesheet" type="text/css" media="all" href="../css/style.css" />
 	<title>Tab Data</title>
 </head>
 
@@ -33,6 +34,31 @@
 			</td>
 		</tr>
 	</table>
+	
+	<div id="settingsView">
+		<div id="settings">
+
+			<h1 class="center">Settings</h1>
+			<table>
+				<tr>
+					<td>
+						<label>Enable memory usage tracking?</label>
+					</td>
+					<td>
+						<input id="memoryTrackingPref" type="checkbox" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>How many <b>seconds</b> between memory data collection?</label>
+					</td>
+					<td>
+						<input id="memoryIntervalPref" type="number" />
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </body>
 
 </html>
