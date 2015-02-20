@@ -8,5 +8,13 @@
   "version": "0.2.0",
   "permissions": {
     "private-browsing": true
-  }
+  },
+  "preferences": [
+    {
+      "name": "memoryInterval",
+      "title": "How many seconds between memory data collection?",
+      "type": "string",
+      "value": "1"
+    }
+  ]
 }

@@ -1,5 +1,6 @@
 var tabs = require("sdk/tabs"),
 	ss = require("./SimpleStorage"),
+	Preference = require("Preference"),
 	sessionCount = 0,
 	currentCount = 0,
 	markedTabs = [],
@@ -99,7 +100,7 @@ exports.init = function () {
 		currentCount--;
 	});
 
-	require("timers").setTimeout(updateMemoryCounters, 1000);
+	require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
 };
 
 exports.getGlobalCount = function () {
@@ -126,5 +127,5 @@ function updateMemoryCounters() {
 	markedTabs = []; // reset memory counts
 	MemoryReporterManager.getReports(handleReport, null, finishReporting, null, false);
 
-	require("timers").setTimeout(updateMemoryCounters, 1000);
+	require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
 }
