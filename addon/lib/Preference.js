@@ -12,6 +12,10 @@ exports.registerListener = function () {
 	preference.on("memoryTracking", onPrefChange);
 };
 
+exports.removeListener = function () {
+	preference.removeListener("memoryTracking", onPrefChange);
+};
+
 exports.get = function (name) {
 	return preference.prefs[name];
 };
