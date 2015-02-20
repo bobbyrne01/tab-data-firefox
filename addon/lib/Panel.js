@@ -9,7 +9,7 @@ exports.init = function () {
 
 	panel = Panel.Panel({
 		width: 500,
-		height: 300,
+		height: 350,
 		contentURL: Data.get("html/view.html"),
 		contentScriptFile: Data.get("js/controller.js"),
 		onShow: function () {
@@ -19,7 +19,8 @@ exports.init = function () {
 				sessionCount: Tab.getSessionCount(),
 				currentCount: Tab.getCurrentCount(),
 				memoryTracking: Preference.get("memoryTracking"),
-				memoryInterval: Preference.get("memoryInterval")
+				memoryInterval: Preference.get("memoryInterval"),
+				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles")
 			});
 
 			panel.port.emit("stats", stats);
@@ -30,13 +31,17 @@ exports.init = function () {
 			});
 		}
 	});
-	
+
 	panel.port.on("memoryTrackingSetting", function (value) {
 		Preference.set('memoryTracking', value);
 	});
-	
+
 	panel.port.on("memoryIntervalSetting", function (value) {
 		Preference.set('memoryInterval', value);
+	});
+
+	panel.port.on("memoryUsageOnTabTitlesSetting", function (value) {
+		Preference.set('memoryUsageOnTabTitles', value);
 	});
 };
 

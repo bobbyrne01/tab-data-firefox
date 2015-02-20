@@ -21,6 +21,9 @@ exports.init = function () {
 
 	MemoryReporterManager = Cc["@mozilla.org/memory-reporter-manager;1"].getService(Ci.nsIMemoryReporterManager);
 
+	/*
+	 *
+	 */
 	handleReport = function (process, path, kind, units, amount, description) {
 
 		if (path.indexOf('explicit/window-objects/top(') >= 0) {
@@ -63,17 +66,23 @@ exports.init = function () {
 		}
 	};
 
+	/*
+	 *
+	 */
 	finishReporting = function () {
-		for each(var tab in tabs) {
 
-			for (var j = 0; j < markedTabs.length; j++) {
+		if (Preference.get("memoryUsageOnTabTitles")) {
+			for each(var tab in tabs) {
 
-				var repl = JSON.parse(markedTabs[j]).url.replace(/\\/g, "/");
+				for (var j = 0; j < markedTabs.length; j++) {
 
-				if (repl.indexOf(tab.url) >= 0) {
-					tab.title = bytesToSize(
-							JSON.parse(markedTabs[j]).amount) + ': ' +
-						(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
+					var repl = JSON.parse(markedTabs[j]).url.replace(/\\/g, "/");
+
+					if (repl.indexOf(tab.url) >= 0) {
+						tab.title = bytesToSize(
+								JSON.parse(markedTabs[j]).amount) + ': ' +
+							(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
+					}
 				}
 			}
 		}
