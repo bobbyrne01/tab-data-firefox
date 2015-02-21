@@ -1,6 +1,6 @@
 {
   "name": "tab-data-firefox",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Firefox addon providing user with tab related stats/data",
   "main": "addon/lib/main.js",
   "scripts": {
