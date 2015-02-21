@@ -8,71 +8,90 @@
 </head>
 
 <body>
-	<table>
-		<tr>
-			<td>
-				<label>Open <b>now</b>: </label>
-			</td>
-			<td>
-				<input type="text" id="currentCount" disabled size="10" />
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<label>Opened during <b>session</b>: </label>
-			</td>
-			<td>
-				<input type="text" id="sessionCount" disabled size="10" />
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<label>Opened since <b>addon install</b>: </label>
-			</td>
-			<td>
-				<input type="text" id="globalCount" disabled size="10" />
-			</td>
-		</tr>
-	</table>
 
-	<div id="settingsView">
-		<div id="settings">
-
-			<h1 class="center">Settings</h1>
-			<table>
-				<tr>
-					<td>
-						<label>Enable memory usage tracking?</label>
-					</td>
-					<td>
-						<input id="memoryTrackingPref" type="checkbox" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>How many <b>seconds</b> between memory data collection?</label>
-					</td>
-					<td>
-						<input id="memoryIntervalPref" type="number" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>Show memory usage in tab titles?</label>
-					</td>
-					<td>
-						<input id="memoryUsageOnTabTitlesPref" type="checkbox" />
-					</td>
-				</tr>
-				<!--<tr>
-					<td>
-						<label>Show memory usage in separate tab?</label>
-					</td>
-					<td>
-						<input id="memoryUsageInTabPref" type="checkbox" />
-					</td>
-				</tr>-->
-			</table>
+	<div class="tabs">
+		<div class="tab">
+			<input type="radio" id="tab-1" name="tab-group-1" hidden checked />
+			<label class="tabLabel" for="tab-1">Counts</label>
+			<div class="content">
+				<table>
+					<tr>
+						<td>
+							<label>Open <b>now</b>: </label>
+						</td>
+						<td>
+							<input type="text" id="currentCount" disabled size="10" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Opened during <b>session</b>: </label>
+						</td>
+						<td>
+							<input type="text" id="sessionCount" disabled size="10" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Opened since <b>addon install</b>: </label>
+						</td>
+						<td>
+							<input type="text" id="globalCount" disabled size="10" />
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<!-- <div class="tab">
+	        <input type="radio" id="tab-2" name="tab-group-1" />
+	        <label class="tabLabel" for="tab-2">Memory usage</label>
+	        <div class="content">
+	            <p>Stuff for Tab Two</p>
+	        </div>
+	    </div> -->
+		<div class="tab">
+			<input type="radio" id="tab-3" name="tab-group-1" hidden />
+			<label class="tabLabel" for="tab-3">Settings</label>
+			<div class="content">
+				<div id="settingsView">
+					<div id="settings">
+						<table>
+							<tr>
+								<td>
+									<label>Enable memory usage tracking?</label>
+								</td>
+								<td>
+									<input id="memoryTrackingPref" type="checkbox" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>How many <b>seconds</b> between memory data collection?</label>
+								</td>
+								<td>
+									<input id="memoryIntervalPref" type="number" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Show memory usage in tab titles?</label>
+								</td>
+								<td>
+									<input id="memoryUsageOnTabTitlesPref" type="checkbox" />
+								</td>
+							</tr>
+							<!--<tr>
+								<td>
+									<label>Show memory usage in separate tab?</label>
+								</td>
+								<td>
+									<input id="memoryUsageInTabPref" type="checkbox" />
+								</td>
+							</tr>-->
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
