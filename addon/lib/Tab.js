@@ -1,6 +1,7 @@
 var tabs = require("sdk/tabs"),
 	ss = require("./SimpleStorage"),
-	Preference = require("Preference"),
+	Preference = require("./Preference"),
+	Panel = require("./Panel"),
 	sessionCount = 0,
 	currentCount = 0,
 	markedTabs = [],
@@ -22,7 +23,7 @@ exports.init = function () {
 	MemoryReporterManager = Cc["@mozilla.org/memory-reporter-manager;1"].getService(Ci.nsIMemoryReporterManager);
 
 	/*
-	 *
+	 * Callback for nsIMemoryReporterManager
 	 */
 	handleReport = function (process, path, kind, units, amount, description) {
 
@@ -67,11 +68,14 @@ exports.init = function () {
 	};
 
 	/*
-	 *
+	 * Callback for nsIMemoryReporterManager
 	 */
 	finishReporting = function () {
 
 		if (Preference.get("memoryUsageOnTabTitles")) {
+			
+			var memoryDump = [];
+			
 			for each(var tab in tabs) {
 
 				for (var j = 0; j < markedTabs.length; j++) {
@@ -79,12 +83,20 @@ exports.init = function () {
 					var repl = JSON.parse(markedTabs[j]).url.replace(/\\/g, "/");
 
 					if (repl.indexOf(tab.url) >= 0) {
+						
+						memoryDump.push({
+							tabTitle: (tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title),
+							memory: bytesToSize(JSON.parse(markedTabs[j]).amount)
+						});
+						
 						tab.title = bytesToSize(
 								JSON.parse(markedTabs[j]).amount) + ': ' +
 							(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
 					}
 				}
 			}
+			
+			Panel.get().port.emit("memoryDump", JSON.stringify(memoryDump));
 		}
 	};
 

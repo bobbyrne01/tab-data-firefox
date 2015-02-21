@@ -57,3 +57,14 @@ self.port.on("stats", function (stats) {
 	document.getElementById("memoryIntervalPref").value = parsedStats.memoryInterval;
 	document.getElementById("memoryUsageOnTabTitlesPref").checked = parsedStats.memoryUsageOnTabTitles;
 });
+
+self.port.on("memoryDump", function (value) {
+	
+	var dump = JSON.parse(value);
+	document.getElementById("memoryDump").textContent = '';
+	
+	for (var i = 0; i < dump.length; i++){
+		document.getElementById("memoryDump").appendChild(document.createTextNode(dump[i].memory + ': ' + dump[i].tabTitle));
+		document.getElementById("memoryDump").appendChild(document.createElement('br'));
+	}
+});
