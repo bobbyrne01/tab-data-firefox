@@ -20,7 +20,9 @@ exports.init = function () {
 				currentCount: Tab.getCurrentCount(),
 				memoryTracking: Preference.get("memoryTracking"),
 				memoryInterval: Preference.get("memoryInterval"),
-				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles")
+				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles"),
+				memoryCautionThreshold: Preference.get("memoryCautionThreshold"),
+				memoryCautionColor: Preference.get("memoryCautionColor")
 			});
 
 			panel.port.emit("stats", stats);
@@ -43,9 +45,16 @@ exports.init = function () {
 	panel.port.on("memoryUsageOnTabTitlesSetting", function (value) {
 		Preference.set('memoryUsageOnTabTitles', value);
 	});
+	
+	panel.port.on("memoryCautionThresholdSetting", function (value) {
+		Preference.set('memoryCautionThreshold', value);
+	});
+	
+	panel.port.on("memoryCautionColorSetting", function (value) {
+		Preference.set('memoryCautionColor', value);
+	});
 };
 
 exports.get = function () {
-
 	return panel;
 };

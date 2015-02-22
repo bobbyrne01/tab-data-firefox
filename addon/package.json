@@ -1,32 +1,38 @@
 {
-  "name": "tab-data-addon",
-  "title": "Tab Data",
-  "id": "jid1-4ogjq7MUzAiCOw",
-  "description": "Provides user with tab related stats/data",
-  "author": "Robert Byrne",
-  "license": "GNU GPL v3",
-  "version": "0.2.6",
-  "permissions": {
-    "private-browsing": true
-  },
-  "preferences": [
-    {
-      "name": "memoryInterval",
-      "title": "How many seconds between memory data collection?",
-      "type": "string",
-      "value": "10"
-    },
-    {
-      "name": "memoryTracking",
-      "title": "Enable memory usage tracking?",
-      "type": "bool",
-      "value": true
-    },
-    {
-      "name": "memoryUsageOnTabTitles",
-      "title": "Show memory usage in tab titles?",
-      "type": "bool",
-      "value": true
-    }
-  ]
+	"name": "tab-data-addon",
+	"title": "Tab Data",
+	"id": "jid1-4ogjq7MUzAiCOw",
+	"description": "Provides user with tab related stats/data",
+	"author": "Robert Byrne",
+	"license": "GNU GPL v3",
+	"version": "0.2.6",
+	"permissions": {
+		"private-browsing": true
+	},
+	"preferences": [{
+		"name": "memoryInterval",
+		"title": "How many seconds between memory data collection?",
+		"type": "string",
+		"value": "10"
+	}, {
+		"name": "memoryTracking",
+		"title": "Enable memory usage tracking?",
+		"type": "bool",
+		"value": true
+	}, {
+		"name": "memoryUsageOnTabTitles",
+		"title": "Show memory usage in tab titles?",
+		"type": "bool",
+		"value": true
+	}, {
+		"name": "memoryCautionThreshold",
+		"title": "Memory caution threshold? (In megabytes)",
+		"type": "string",
+		"value": "50"
+	}, {
+		"name": "memoryCautionColor",
+		"title": "Color of tab title if threshold exceeded?",
+		"type": "string",
+		"value": "#FF5050"
+	}]
 }

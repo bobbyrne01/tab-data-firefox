@@ -43,12 +43,12 @@
 			</div>
 		</div>
 		<div class="tab">
-	        <input type="radio" id="tab-2" name="tab-group-1" hidden />
-	        <label class="tabLabel" for="tab-2">Memory usage</label>
-	        <div class="content">
-	            <div id="memoryDump"></div>
-	        </div>
-	    </div>
+			<input type="radio" id="tab-2" name="tab-group-1" hidden />
+			<label class="tabLabel" for="tab-2">Memory usage</label>
+			<div class="content">
+				<div id="memoryDump"></div>
+			</div>
+		</div>
 		<div class="tab">
 			<input type="radio" id="tab-3" name="tab-group-1" hidden />
 			<label class="tabLabel" for="tab-3">Settings</label>
@@ -80,12 +80,20 @@
 									<input id="memoryUsageOnTabTitlesPref" type="checkbox" />
 								</td>
 							</tr>
-							<!--<tr>
+							<!-- <tr>
 								<td>
-									<label>Show memory usage in separate tab?</label>
+									<label>Memory caution threshold? (In megabytes)</label>
 								</td>
 								<td>
-									<input id="memoryUsageInTabPref" type="checkbox" />
+									<input id="memoryCautionThresholdPref" type="number" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Color of tab title if threshold exceeded?</label>
+								</td>
+								<td>
+									<input id="memoryCautionColorPref" type="text" />
 								</td>
 							</tr>-->
 						</table>

@@ -20,8 +20,69 @@ exports.init = function () {
 		ss.setGlobalCount(0);
 	}
 
-	MemoryReporterManager = Cc["@mozilla.org/memory-reporter-manager;1"].getService(Ci.nsIMemoryReporterManager);
+	// create callbacks for nsIMemoryReporterManager.getReports()
+	MemoryReporterManager = Cc["@mozilla.org/memory-reporter-manager;1"].getService(Ci.nsIMemoryReporterManager);	
+	initHandleReport();
+	initFinishReporting();
 
+	for each(var tab in tabs) {
+		ss.setGlobalCount(ss.getGlobalCount() + 1, new Date().getTime());
+		sessionCount++;
+		currentCount++;
+	}
+
+	// Listen for tab openings.
+	tabs.on('open', function onOpen(tab) {
+		ss.setGlobalCount(ss.getGlobalCount() + 1, new Date().getTime());
+		sessionCount++;
+		currentCount++;
+	});
+
+	//Listen for tab closes.
+	tabs.on('close', function onOpen(tab) {
+		currentCount--;
+	});
+
+	if (Preference.get("memoryTracking")) {
+		require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+	}
+};
+
+exports.getGlobalCount = function () {
+	return ss.getGlobalCount();
+};
+
+exports.getSessionCount = function () {
+	return sessionCount;
+};
+
+exports.getCurrentCount = function () {
+	return currentCount;
+};
+
+function bytesToSize(bytes) {
+	if (bytes === 0) return '0 Byte';
+	var k = 1000;
+	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	var i = Math.floor(Math.log(bytes) / Math.log(k));
+	return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+}
+
+function updateMemoryCounters() {
+	markedTabs = []; // reset memory counts
+	MemoryReporterManager.getReports(handleReport, null, finishReporting, null, false);
+
+	if (Preference.get("memoryTracking")) {
+		require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+	}
+}
+
+exports.updateMemoryCounters = function () {
+	updateMemoryCounters();
+};
+
+function initHandleReport() {
+	
 	/*
 	 * Callback for nsIMemoryReporterManager
 	 */
@@ -66,16 +127,19 @@ exports.init = function () {
 			}
 		}
 	};
+}
 
+function initFinishReporting() {
+	
 	/*
 	 * Callback for nsIMemoryReporterManager
 	 */
 	finishReporting = function () {
 
 		if (Preference.get("memoryUsageOnTabTitles")) {
-			
+
 			var memoryDump = [];
-			
+
 			for each(var tab in tabs) {
 
 				for (var j = 0; j < markedTabs.length; j++) {
@@ -84,77 +148,23 @@ exports.init = function () {
 
 					if (repl.indexOf(tab.url) >= 0) {
 						
+						if (JSON.parse(markedTabs[j]).amount >= (parseInt(Preference.get('memoryCautionThreshold')) * 1000000)){
+							console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
+						}
+
 						memoryDump.push({
 							tabTitle: (tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title),
 							memory: bytesToSize(JSON.parse(markedTabs[j]).amount)
 						});
-						
+
 						tab.title = bytesToSize(
 								JSON.parse(markedTabs[j]).amount) + ': ' +
 							(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
 					}
 				}
 			}
-			
+
 			Panel.get().port.emit("memoryDump", JSON.stringify(memoryDump));
 		}
 	};
-
-	for each(var tab in tabs) {
-
-		ss.setGlobalCount(ss.getGlobalCount() + 1, new Date().getTime());
-		sessionCount++;
-		currentCount++;
-	}
-
-	// Listen for tab openings.
-	tabs.on('open', function onOpen(tab) {
-
-		ss.setGlobalCount(ss.getGlobalCount() + 1, new Date().getTime());
-		sessionCount++;
-		currentCount++;
-	});
-
-	//Listen for tab closes.
-	tabs.on('close', function onOpen(tab) {
-
-		currentCount--;
-	});
-
-	if (Preference.get("memoryTracking")) {
-		require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
-	}
-};
-
-exports.getGlobalCount = function () {
-	return ss.getGlobalCount();
-};
-
-exports.getSessionCount = function () {
-	return sessionCount;
-};
-
-exports.getCurrentCount = function () {
-	return currentCount;
-};
-
-function bytesToSize(bytes) {
-	if (bytes === 0) return '0 Byte';
-	var k = 1000;
-	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-	var i = Math.floor(Math.log(bytes) / Math.log(k));
-	return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
 }
-
-function updateMemoryCounters() {
-	markedTabs = []; // reset memory counts
-	MemoryReporterManager.getReports(handleReport, null, finishReporting, null, false);
-
-	if (Preference.get("memoryTracking")) {
-		require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
-	}
-}
-
-exports.updateMemoryCounters = function () {
-	updateMemoryCounters();
-};

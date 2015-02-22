@@ -42,6 +42,23 @@ document.getElementById('memoryUsageOnTabTitlesPref').addEventListener("change",
 	}
 }, false);
 
+/*document.getElementById('memoryCautionThresholdPref').onkeyup = function (event) {
+
+	if (parseInt(document.getElementById('memoryCautionThresholdPref').value) >= 0) {
+
+		self.port.emit("memoryCautionThresholdSetting", document.getElementById('memoryCautionThresholdPref').value);
+		document.getElementById('memoryCautionThresholdPref').className = 'green';
+
+	} else {
+
+		document.getElementById('memoryCautionThresholdPref').className = 'red';
+	}
+};
+
+document.getElementById('memoryCautionColorPref').onkeyup = function (event) {
+	self.port.emit("memoryCautionColorPrefSetting", document.getElementById('memoryCautionColorPref').value);
+};*/
+
 
 
 /*
@@ -56,14 +73,16 @@ self.port.on("stats", function (stats) {
 	document.getElementById("memoryTrackingPref").checked = parsedStats.memoryTracking;
 	document.getElementById("memoryIntervalPref").value = parsedStats.memoryInterval;
 	document.getElementById("memoryUsageOnTabTitlesPref").checked = parsedStats.memoryUsageOnTabTitles;
+	//document.getElementById("memoryCautionThresholdPref").value = parsedStats.memoryCautionThreshold;
+	//document.getElementById("memoryCautionColorPref").value = parsedStats.memoryCautionColor;
 });
 
 self.port.on("memoryDump", function (value) {
-	
+
 	var dump = JSON.parse(value);
 	document.getElementById("memoryDump").textContent = '';
-	
-	for (var i = 0; i < dump.length; i++){
+
+	for (var i = 0; i < dump.length; i++) {
 		document.getElementById("memoryDump").appendChild(document.createTextNode(dump[i].memory + ': ' + dump[i].tabTitle));
 		document.getElementById("memoryDump").appendChild(document.createElement('br'));
 	}
