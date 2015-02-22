@@ -36,20 +36,31 @@ exports.init = function () {
 
 	panel.port.on("memoryTrackingSetting", function (value) {
 		Preference.set('memoryTracking', value);
+		
+		if (!Preference.get('memoryTracking')){
+			Tab.removeScheduledFunction();
+			Tab.rollbackTitles();
+		}
 	});
 
 	panel.port.on("memoryIntervalSetting", function (value) {
 		Preference.set('memoryInterval', value);
+		Tab.removeScheduledFunction();
+		Tab.reinitTimeout();
 	});
 
 	panel.port.on("memoryUsageOnTabTitlesSetting", function (value) {
 		Preference.set('memoryUsageOnTabTitles', value);
+		
+		if (!Preference.get('memoryUsageOnTabTitles')){
+			Tab.rollbackTitles();
+		}
 	});
-	
+
 	panel.port.on("memoryCautionThresholdSetting", function (value) {
 		Preference.set('memoryCautionThreshold', value);
 	});
-	
+
 	panel.port.on("memoryCautionColorSetting", function (value) {
 		Preference.set('memoryCautionColor', value);
 	});

@@ -14,11 +14,13 @@ exports.registerListener = function () {
 
 exports.removeListener = function () {
 	preference.removeListener("memoryTracking", onPrefChange);
+	Tab.rollbackTitles();
 };
 
 exports.get = function (name) {
 	return preference.prefs[name];
 };
+
 exports.set = function (name, value) {
 	preference.prefs[name] = value;
 };

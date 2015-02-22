@@ -8,7 +8,8 @@ var tabs = require("sdk/tabs"),
 	MemoryReporterManager,
 	handleReport,
 	finishReporting,
-	obj;
+	obj,
+	timeoutId;
 const {
 	Cc, Ci
 } = require("chrome");
@@ -21,7 +22,7 @@ exports.init = function () {
 	}
 
 	// create callbacks for nsIMemoryReporterManager.getReports()
-	MemoryReporterManager = Cc["@mozilla.org/memory-reporter-manager;1"].getService(Ci.nsIMemoryReporterManager);	
+	MemoryReporterManager = Cc["@mozilla.org/memory-reporter-manager;1"].getService(Ci.nsIMemoryReporterManager);
 	initHandleReport();
 	initFinishReporting();
 
@@ -44,7 +45,7 @@ exports.init = function () {
 	});
 
 	if (Preference.get("memoryTracking")) {
-		require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+		timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
 	}
 };
 
@@ -73,7 +74,7 @@ function updateMemoryCounters() {
 	MemoryReporterManager.getReports(handleReport, null, finishReporting, null, false);
 
 	if (Preference.get("memoryTracking")) {
-		require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+		timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
 	}
 }
 
@@ -82,7 +83,7 @@ exports.updateMemoryCounters = function () {
 };
 
 function initHandleReport() {
-	
+
 	/*
 	 * Callback for nsIMemoryReporterManager
 	 */
@@ -130,7 +131,7 @@ function initHandleReport() {
 }
 
 function initFinishReporting() {
-	
+
 	/*
 	 * Callback for nsIMemoryReporterManager
 	 */
@@ -147,8 +148,8 @@ function initFinishReporting() {
 					var repl = JSON.parse(markedTabs[j]).url.replace(/\\/g, "/");
 
 					if (repl.indexOf(tab.url) >= 0) {
-						
-						if (JSON.parse(markedTabs[j]).amount >= (parseInt(Preference.get('memoryCautionThreshold')) * 1000000)){
+
+						if (JSON.parse(markedTabs[j]).amount >= (parseInt(Preference.get('memoryCautionThreshold')) * 1000000)) {
 							console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
 						}
 
@@ -168,3 +169,20 @@ function initFinishReporting() {
 		}
 	};
 }
+
+exports.rollbackTitles = function () {
+	
+	for each(var tab in tabs) {
+
+		tab.title = (tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
+	}
+};
+
+exports.removeScheduledFunction = function () {
+	require("sdk/timers").clearTimeout(timeoutId);
+};
+
+exports.reinitTimeout = function () {
+	
+	timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+};
