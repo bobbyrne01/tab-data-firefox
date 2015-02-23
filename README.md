@@ -24,3 +24,17 @@ The addon uses the [nsIMemoryReporterManager](https://developer.mozilla.org/en-U
 For each process, data is parsed from the `explicit` tree (which represents all the memory allocated via explicit calls to allocation functions). More specifically, from the `explicit/window-objects/` tree path (which represents all JavaScript `window` objects) only if the leaf node contains an `id` and a `url` matching a currently open tab, otherwise the node is disregarded.
 
 Measurements use bytes as their unit and the value of each leaf node is the sum of all its children, therefore the value displayed in a tab title corresponds to a child of `explicit/window-objects/`.
+
+### Development
+
+    npm install
+    grunt
+    
+### Run
+
+    rob@work:~/git/tab-data-firefox$ cd addon/
+    rob@work:~/git/tab-data-firefox/addon$ ~/apps/addon-sdk-1.17/bin/cfx run
+
+### Package
+
+    rob@work:~/git/tab-data-firefox/addon$ ~/apps/addon-sdk-1.17/bin/cfx xpi
