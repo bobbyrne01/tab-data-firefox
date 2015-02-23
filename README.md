@@ -15,6 +15,7 @@ Provides user with tab related stats/data
 * Display tab memory usage in title
 * Preference to toggle tab memory usage on/off
 * Preference to set interval between memory usage collection
+* Perform a garbage collection
 
 ### Monitoring memory 
 
