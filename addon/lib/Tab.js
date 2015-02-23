@@ -171,7 +171,7 @@ function initFinishReporting() {
 }
 
 exports.rollbackTitles = function () {
-	
+
 	for each(var tab in tabs) {
 
 		tab.title = (tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
@@ -183,6 +183,6 @@ exports.removeScheduledFunction = function () {
 };
 
 exports.reinitTimeout = function () {
-	
+
 	timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
 };

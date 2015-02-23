@@ -59,6 +59,15 @@ document.getElementById('memoryCautionColorPref').onkeyup = function (event) {
 	self.port.emit("memoryCautionColorPrefSetting", document.getElementById('memoryCautionColorPref').value);
 };*/
 
+document.getElementById('schedulePreciseGC').addEventListener("click", function (event) {
+	document.getElementById('schedulePreciseGC').disabled = true;
+	self.port.emit("schedulePreciseGC", '');
+}, false);
+
+/*document.getElementById('garbageCollect').addEventListener("click", function (event) {
+	self.port.emit("garbageCollect", '');
+}, false);*/
+
 
 
 /*
@@ -86,4 +95,12 @@ self.port.on("memoryDump", function (value) {
 		document.getElementById("memoryDump").appendChild(document.createTextNode(dump[i].memory + ': ' + dump[i].tabTitle));
 		document.getElementById("memoryDump").appendChild(document.createElement('br'));
 	}
+});
+
+self.port.on("schedulePreciseGC", function (value) {
+	document.getElementById('schedulePreciseGCStatus').textContent = value;
+	document.getElementById('schedulePreciseGC').disabled = false;
+	setTimeout(function(){ 
+		document.getElementById('schedulePreciseGCStatus').textContent = '';
+	}, 5000);
 });

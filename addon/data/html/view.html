@@ -10,9 +10,18 @@
 <body>
 
 	<div class="tabs">
+
 		<div class="tab">
 			<input type="radio" id="tab-1" name="tab-group-1" hidden checked />
-			<label class="tabLabel" for="tab-1">Counts</label>
+			<label class="tabLabel" for="tab-1">Memory usage</label>
+			<div class="content">
+				<div id="memoryDump"></div>
+			</div>
+		</div>
+
+		<div class="tab">
+			<input type="radio" id="tab-2" name="tab-group-1" hidden />
+			<label class="tabLabel" for="tab-2">Counts</label>
 			<div class="content">
 				<table>
 					<tr>
@@ -42,13 +51,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="tab">
-			<input type="radio" id="tab-2" name="tab-group-1" hidden />
-			<label class="tabLabel" for="tab-2">Memory usage</label>
-			<div class="content">
-				<div id="memoryDump"></div>
-			</div>
-		</div>
+
 		<div class="tab">
 			<input type="radio" id="tab-3" name="tab-group-1" hidden />
 			<label class="tabLabel" for="tab-3">Settings</label>
@@ -94,6 +97,23 @@
 								</td>
 								<td>
 									<input id="memoryCautionColorPref" type="text" />
+								</td>
+							</tr>-->
+							<tr>
+								<td>
+									<label>Perform a garbage collection</label>
+								</td>
+								<td>
+									<button id="schedulePreciseGC">Run</button>
+									<label id="schedulePreciseGCStatus"></label>
+								</td>
+							</tr>
+							<!-- <tr>
+								<td>
+									<label>Force a garbage collection followed by a cycle collection</label>
+								</td>
+								<td>
+									<button id="garbageCollect">Perform GC and CC</button>
 								</td>
 							</tr>-->
 						</table>
