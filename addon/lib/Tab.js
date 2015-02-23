@@ -2,17 +2,15 @@ var tabs = require("sdk/tabs"),
 	ss = require("./SimpleStorage"),
 	Preference = require("./Preference"),
 	Panel = require("./Panel"),
+	Chrome = require("./Chrome"),
 	sessionCount = 0,
 	currentCount = 0,
 	markedTabs = [],
-	MemoryReporterManager,
+	memoryReporterManager,
 	handleReport,
 	finishReporting,
 	obj,
 	timeoutId;
-const {
-	Cc, Ci
-} = require("chrome");
 
 
 exports.init = function () {
@@ -22,7 +20,7 @@ exports.init = function () {
 	}
 
 	// create callbacks for nsIMemoryReporterManager.getReports()
-	MemoryReporterManager = Cc["@mozilla.org/memory-reporter-manager;1"].getService(Ci.nsIMemoryReporterManager);
+	memoryReporterManager = Chrome.initMemoryReporterManager();
 	initHandleReport();
 	initFinishReporting();
 
@@ -71,7 +69,7 @@ function bytesToSize(bytes) {
 
 function updateMemoryCounters() {
 	markedTabs = []; // reset memory counts
-	MemoryReporterManager.getReports(handleReport, null, finishReporting, null, false);
+	memoryReporterManager.getReports(handleReport, null, finishReporting, null, false);
 
 	if (Preference.get("memoryTracking")) {
 		timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);

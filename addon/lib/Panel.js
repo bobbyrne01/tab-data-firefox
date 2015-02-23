@@ -3,10 +3,8 @@ var Panel = require("sdk/panel"),
 	Data = require("./Data"),
 	Button = require("./ToggleButton"),
 	Preference = require("./Preference"),
+	Chrome = require("./Chrome"),
 	panel;
-const {
-	Ci, Cc, Cu
-} = require("chrome");
 
 exports.init = function () {
 
@@ -69,11 +67,7 @@ exports.init = function () {
 	});
 
 	panel.port.on("schedulePreciseGC", function (value) {
-		Cu.schedulePreciseGC(
-			function () {
-				panel.port.emit('schedulePreciseGC', 'done');
-			}
-		);
+		Chrome.gc(panel);
 	});
 
 	panel.port.on("garbageCollect", function (value) {

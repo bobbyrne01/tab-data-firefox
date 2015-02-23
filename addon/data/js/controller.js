@@ -100,7 +100,7 @@ self.port.on("memoryDump", function (value) {
 self.port.on("schedulePreciseGC", function (value) {
 	document.getElementById('schedulePreciseGCStatus').textContent = value;
 	document.getElementById('schedulePreciseGC').disabled = false;
-	setTimeout(function(){ 
+	setTimeout(function () {
 		document.getElementById('schedulePreciseGCStatus').textContent = '';
 	}, 5000);
 });
