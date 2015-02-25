@@ -22,8 +22,8 @@
 	}, {
 		"name": "memoryUsageOnTabTitles",
 		"title": "Show memory usage in tab titles?",
-		"type": "bool",
-		"value": true
+		"type": "string",
+		"value": "0"
 	}, {
 		"name": "memoryCautionThreshold",
 		"title": "Memory caution threshold? (In megabytes)",

@@ -21,7 +21,7 @@ exports.init = function () {
 				currentCount: Tab.getCurrentCount(),
 				memoryTracking: Preference.get("memoryTracking"),
 				memoryInterval: Preference.get("memoryInterval"),
-				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles"),
+				memoryUsageOnTabTitles: parseInt(Preference.get("memoryUsageOnTabTitles")),
 				memoryCautionThreshold: Preference.get("memoryCautionThreshold"),
 				memoryCautionColor: Preference.get("memoryCautionColor")
 			});
@@ -51,11 +51,8 @@ exports.init = function () {
 	});
 
 	panel.port.on("memoryUsageOnTabTitlesSetting", function (value) {
+		Tab.rollbackTitles();
 		Preference.set('memoryUsageOnTabTitles', value);
-
-		if (!Preference.get('memoryUsageOnTabTitles')) {
-			Tab.rollbackTitles();
-		}
 	});
 
 	panel.port.on("memoryCautionThresholdSetting", function (value) {

@@ -152,13 +152,21 @@ function initFinishReporting() {
 						}
 
 						memoryDump.push({
-							tabTitle: (tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title),
+							tabTitle: (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title),
 							memory: bytesToSize(JSON.parse(markedTabs[j]).amount)
 						});
 
-						tab.title = bytesToSize(
-								JSON.parse(markedTabs[j]).amount) + ': ' +
-							(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
+						if (parseInt(Preference.get("memoryUsageOnTabTitles")) === 0) {
+
+							tab.title = bytesToSize(
+									JSON.parse(markedTabs[j]).amount) + ': ' +
+								(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
+
+						} else if (parseInt(Preference.get("memoryUsageOnTabTitles")) === 1) {
+
+							tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[0] : tab.title) +
+								': ' + bytesToSize(JSON.parse(markedTabs[j]).amount);
+						}
 					}
 				}
 			}
@@ -172,7 +180,14 @@ exports.rollbackTitles = function () {
 
 	for each(var tab in tabs) {
 
-		tab.title = (tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
+		if (parseInt(Preference.get("memoryUsageOnTabTitles")) === 0) {
+
+			tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title);
+
+		} else if (parseInt(Preference.get("memoryUsageOnTabTitles")) === 1) {
+
+			tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[0] : tab.title);
+		}
 	}
 };
 
