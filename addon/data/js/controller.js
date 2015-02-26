@@ -8,12 +8,16 @@ document.getElementById('memoryTrackingPref').addEventListener("change", functio
 		self.port.emit("memoryTrackingSetting", true);
 		document.getElementById('memoryIntervalPref').disabled = false;
 		document.getElementById('memoryUsageOnTabTitlesPref').disabled = false;
+		document.getElementById('memoryUrlInUsage').disabled = false;
 
 	} else {
 
 		self.port.emit("memoryTrackingSetting", false);
 		document.getElementById('memoryIntervalPref').disabled = true;
 		document.getElementById('memoryUsageOnTabTitlesPref').disabled = true;
+		document.getElementById('memoryUrlInUsage').disabled = true;
+
+		document.getElementById("memoryDump").textContent = '';
 	}
 }, false);
 
@@ -33,6 +37,11 @@ document.getElementById('memoryIntervalPref').onkeyup = function (event) {
 document.getElementById('memoryUsageOnTabTitlesPref').addEventListener("change", function (event) {
 
 	self.port.emit("memoryUsageOnTabTitlesSetting", document.getElementById('memoryUsageOnTabTitlesPref').value);
+}, false);
+
+document.getElementById('memoryUrlInUsage').addEventListener("change", function (event) {
+
+	self.port.emit("memoryUrlInUsageSetting", document.getElementById('memoryUrlInUsage').checked);
 }, false);
 
 /*document.getElementById('memoryCautionThresholdPref').onkeyup = function (event) {
@@ -75,6 +84,7 @@ self.port.on("stats", function (stats) {
 	document.getElementById("memoryTrackingPref").checked = parsedStats.memoryTracking;
 	document.getElementById("memoryIntervalPref").value = parsedStats.memoryInterval;
 	document.getElementById("memoryUsageOnTabTitlesPref").value = parsedStats.memoryUsageOnTabTitles;
+	document.getElementById("memoryUrlInUsage").checked = parsedStats.memoryUrlInUsage;
 	//document.getElementById("memoryCautionThresholdPref").value = parsedStats.memoryCautionThreshold;
 	//document.getElementById("memoryCautionColorPref").value = parsedStats.memoryCautionColor;
 });
@@ -85,7 +95,14 @@ self.port.on("memoryDump", function (value) {
 	document.getElementById("memoryDump").textContent = '';
 
 	for (var i = 0; i < dump.length; i++) {
-		document.getElementById("memoryDump").appendChild(document.createTextNode(dump[i].memory + ': ' + dump[i].tabTitle));
+
+		var string = dump[i].memory + ': ' + dump[i].tabTitle;
+
+		if (document.getElementById("memoryUrlInUsage").checked) {
+			string += ': ' + dump[i].memoryUrlInUsage;
+		}
+
+		document.getElementById("memoryDump").appendChild(document.createTextNode(string));
 		document.getElementById("memoryDump").appendChild(document.createElement('br'));
 	}
 });

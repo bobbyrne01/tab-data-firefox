@@ -155,7 +155,8 @@ function initFinishReporting() {
 
 						memoryDump.push({
 							tabTitle: (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title),
-							memory: bytesToSize(JSON.parse(markedTabs[j]).amount)
+							memory: bytesToSize(JSON.parse(markedTabs[j]).amount),
+							memoryUrlInUsage: tab.url
 						});
 
 						if (Preference.get("memoryUsageOnTabTitles") === 0) {

@@ -22,6 +22,7 @@ exports.init = function () {
 				memoryTracking: Preference.get("memoryTracking"),
 				memoryInterval: Preference.get("memoryInterval"),
 				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles"),
+				memoryUrlInUsage: Preference.get("memoryUrlInUsage"),
 				memoryCautionThreshold: Preference.get("memoryCautionThreshold"),
 				memoryCautionColor: Preference.get("memoryCautionColor")
 			});
@@ -52,6 +53,10 @@ exports.init = function () {
 
 	panel.port.on("memoryUsageOnTabTitlesSetting", function (value) {
 		Preference.set('memoryUsageOnTabTitles', parseInt(value));
+	});
+
+	panel.port.on("memoryUrlInUsageSetting", function (value) {
+		Preference.set('memoryUrlInUsage', value);
 	});
 
 	panel.port.on("memoryCautionThresholdSetting", function (value) {
