@@ -1,65 +1,80 @@
 {
-	"name": "tab-data-addon",
-	"title": "Tab Data",
-	"id": "jid1-4ogjq7MUzAiCOw",
-	"description": "Provides user with tab related stats/data",
-	"author": "Robert Byrne",
-	"license": "GNU GPL v3",
-	"version": "0.3.3",
-	"permissions": {
-		"private-browsing": true
-	},
-	"preferences": [{
-		"name": "memoryInterval",
-		"title": "How many seconds between memory data collection?",
-		"type": "string",
-		"value": "10"
-	}, {
-		"name": "memoryTracking",
-		"title": "Enable memory usage tracking?",
-		"type": "bool",
-		"value": true
-	}, {
-		"name": "memoryUsageOnTabTitles",
-		"title": "Show memory usage in tab titles?",
-		"type": "menulist",
-		"value": 0,
-		"options": [{
-			"value": "0",
-			"label": "Prepend"
-		}, {
-			"value": "1",
-			"label": "Append"
-		}, {
-			"value": "2",
-			"label": "Disable"
-		}]
-	}, {
-		"name": "memoryFormat",
-		"title": "Format of memory usage on panel?",
-		"type": "menulist",
-		"value": 0,
-		"options": [{
-			"value": "0",
-			"label": "JSON"
-		}, {
-			"value": "1",
-			"label": "Plain"
-		}]
-	}, {
-		"name": "memoryUrlInUsage",
-		"title": "Show Url on memory usage panel?",
-		"type": "bool",
-		"value": true
-	}, {
-		"name": "memoryCautionThreshold",
-		"title": "Memory caution threshold? (In megabytes)",
-		"type": "string",
-		"value": "50"
-	}, {
-		"name": "memoryCautionColor",
-		"title": "Color of tab title if threshold exceeded?",
-		"type": "string",
-		"value": "#FF5050"
-	}]
+  "name": "tab-data-addon",
+  "title": "Tab Data",
+  "id": "jid1-4ogjq7MUzAiCOw",
+  "description": "Provides user with tab related stats/data",
+  "author": "Robert Byrne",
+  "license": "GNU GPL v3",
+  "version": "0.3.4",
+  "permissions": {
+    "private-browsing": true
+  },
+  "preferences": [
+    {
+      "name": "memoryInterval",
+      "title": "How many seconds between memory data collection?",
+      "type": "string",
+      "value": "10"
+    },
+    {
+      "name": "memoryTracking",
+      "title": "Enable memory usage tracking?",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "memoryUsageOnTabTitles",
+      "title": "Show memory usage in tab titles?",
+      "type": "menulist",
+      "value": 0,
+      "options": [
+        {
+          "value": "0",
+          "label": "Prepend"
+        },
+        {
+          "value": "1",
+          "label": "Append"
+        },
+        {
+          "value": "2",
+          "label": "Disable"
+        }
+      ]
+    },
+    {
+      "name": "memoryFormat",
+      "title": "Format of memory usage on panel?",
+      "type": "menulist",
+      "value": 0,
+      "options": [
+        {
+          "value": "0",
+          "label": "JSON"
+        },
+        {
+          "value": "1",
+          "label": "Plain"
+        }
+      ]
+    },
+    {
+      "name": "memoryUrlInUsage",
+      "title": "Show Url on memory usage panel?",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "memoryCautionThreshold",
+      "title": "Memory caution threshold? (In megabytes)",
+      "type": "string",
+      "value": "50"
+    },
+    {
+      "name": "memoryCautionColor",
+      "title": "Color of tab title if threshold exceeded?",
+      "type": "string",
+      "value": "#FF5050"
+    }
+  ]
 }
