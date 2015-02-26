@@ -21,6 +21,7 @@ exports.init = function () {
 				currentCount: Tab.getCurrentCount(),
 				memoryTracking: Preference.get("memoryTracking"),
 				memoryInterval: Preference.get("memoryInterval"),
+				memoryFormat: Preference.get("memoryFormat"),
 				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles"),
 				memoryUrlInUsage: Preference.get("memoryUrlInUsage"),
 				memoryCautionThreshold: Preference.get("memoryCautionThreshold"),
@@ -53,6 +54,10 @@ exports.init = function () {
 
 	panel.port.on("memoryUsageOnTabTitlesSetting", function (value) {
 		Preference.set('memoryUsageOnTabTitles', parseInt(value));
+	});
+
+	panel.port.on("memoryFormatSetting", function (value) {
+		Preference.set('memoryFormat', parseInt(value));
 	});
 
 	panel.port.on("memoryUrlInUsageSetting", function (value) {

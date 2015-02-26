@@ -34,6 +34,11 @@ document.getElementById('memoryIntervalPref').onkeyup = function (event) {
 	}
 };
 
+document.getElementById('memoryFormat').addEventListener("change", function (event) {
+
+	self.port.emit("memoryFormatSetting", document.getElementById('memoryFormat').value);
+}, false);
+
 document.getElementById('memoryUsageOnTabTitlesPref').addEventListener("change", function (event) {
 
 	self.port.emit("memoryUsageOnTabTitlesSetting", document.getElementById('memoryUsageOnTabTitlesPref').value);
@@ -66,10 +71,6 @@ document.getElementById('schedulePreciseGC').addEventListener("click", function 
 	self.port.emit("schedulePreciseGC", '');
 }, false);
 
-/*document.getElementById('garbageCollect').addEventListener("click", function (event) {
-	self.port.emit("garbageCollect", '');
-}, false);*/
-
 
 
 /*
@@ -84,6 +85,7 @@ self.port.on("stats", function (stats) {
 	document.getElementById("memoryTrackingPref").checked = parsedStats.memoryTracking;
 	document.getElementById("memoryIntervalPref").value = parsedStats.memoryInterval;
 	document.getElementById("memoryUsageOnTabTitlesPref").value = parsedStats.memoryUsageOnTabTitles;
+	document.getElementById("memoryFormat").value = parsedStats.memoryFormat;
 	document.getElementById("memoryUrlInUsage").checked = parsedStats.memoryUrlInUsage;
 	//document.getElementById("memoryCautionThresholdPref").value = parsedStats.memoryCautionThreshold;
 	//document.getElementById("memoryCautionColorPref").value = parsedStats.memoryCautionColor;
@@ -91,19 +93,50 @@ self.port.on("stats", function (stats) {
 
 self.port.on("memoryDump", function (value) {
 
-	var dump = JSON.parse(value);
 	document.getElementById("memoryDump").textContent = '';
+	var dump = JSON.parse(value);
 
-	for (var i = 0; i < dump.length; i++) {
+	if (parseInt(document.getElementById('memoryFormat').value) === 0) { // JSON
 
-		var string = dump[i].memory + ': ' + dump[i].tabTitle;
+		var pre = document.createElement('pre');
 
-		if (document.getElementById("memoryUrlInUsage").checked) {
-			string += ': ' + dump[i].memoryUrlInUsage;
+		if (!document.getElementById("memoryUrlInUsage").checked) { // remove Url from each object
+
+			for (var i = 0; i < dump.length; i++) {
+				delete dump[i].Url;
+			}
 		}
 
-		document.getElementById("memoryDump").appendChild(document.createTextNode(string));
-		document.getElementById("memoryDump").appendChild(document.createElement('br'));
+		try {
+
+			document.getElementById("memoryDump").appendChild(pre);
+
+			var highlightedJson = syntaxHighlight(JSON.stringify(dump, undefined, 4)),
+				range = document.createRange();
+
+			range.selectNode(pre);
+			var docFrag = range.createContextualFragment(highlightedJson);
+
+			pre.appendChild(docFrag);
+
+		} catch (e) {
+			pre.appendChild(document.createTextNode('Error'));
+			document.getElementById("memoryDump").appendChild(pre);
+		}
+
+	} else { // Plain
+
+		for (var j = 0; j < dump.length; j++) {
+
+			var string = dump[j].Memory + ': ' + dump[j].Title;
+
+			if (document.getElementById("memoryUrlInUsage").checked) {
+				string += ': ' + dump[j].Url;
+			}
+
+			document.getElementById("memoryDump").appendChild(document.createTextNode(string));
+			document.getElementById("memoryDump").appendChild(document.createElement('br'));
+		}
 	}
 });
 
@@ -114,3 +147,28 @@ self.port.on("schedulePreciseGC", function (value) {
 		document.getElementById('schedulePreciseGCStatus').textContent = '';
 	}, 5000);
 });
+
+
+//Taken from: http://stackoverflow.com/a/7220510
+function syntaxHighlight(json) {
+
+	var jsonElements;
+
+	json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+
+		var cls = 'number';
+		if (/^"/.test(match)) {
+			if (/:$/.test(match)) {
+				cls = 'key';
+			} else {
+				cls = 'string';
+			}
+		} else if (/true|false/.test(match)) {
+			cls = 'boolean';
+		} else if (/null/.test(match)) {
+			cls = 'null';
+		}
+		return '<span class="' + cls + '">' + match + '</span>';
+	});
+}
