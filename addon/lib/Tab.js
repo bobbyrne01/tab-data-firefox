@@ -10,10 +10,12 @@ var tabs = require("sdk/tabs"),
 	handleReport,
 	finishReporting,
 	obj,
-	timeoutId;
-
+	timeoutId,
+	oldMemoryUsageOnTabTitles;
 
 exports.init = function () {
+
+	oldMemoryUsageOnTabTitles = parseInt(Preference.get("memoryUsageOnTabTitles"));
 
 	if (typeof ss.getGlobalCount() === 'undefined') {
 		ss.setGlobalCount(0);
@@ -135,7 +137,7 @@ function initFinishReporting() {
 	 */
 	finishReporting = function () {
 
-		if (Preference.get("memoryUsageOnTabTitles")) {
+		if (Preference.get("memoryUsageOnTabTitles") !== 2) {
 
 			var memoryDump = [];
 
@@ -147,8 +149,8 @@ function initFinishReporting() {
 
 					if (repl.indexOf(tab.url) >= 0) {
 
-						if (JSON.parse(markedTabs[j]).amount >= (parseInt(Preference.get('memoryCautionThreshold')) * 1000000)) {
-							console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
+						if (JSON.parse(markedTabs[j]).amount >= (Preference.get('memoryCautionThreshold') * 1000000)) {
+							//console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
 						}
 
 						memoryDump.push({
@@ -156,13 +158,13 @@ function initFinishReporting() {
 							memory: bytesToSize(JSON.parse(markedTabs[j]).amount)
 						});
 
-						if (parseInt(Preference.get("memoryUsageOnTabTitles")) === 0) {
+						if (Preference.get("memoryUsageOnTabTitles") === 0) {
 
 							tab.title = bytesToSize(
 									JSON.parse(markedTabs[j]).amount) + ': ' +
 								(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
 
-						} else if (parseInt(Preference.get("memoryUsageOnTabTitles")) === 1) {
+						} else if (Preference.get("memoryUsageOnTabTitles") === 1) {
 
 							tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[0] : tab.title) +
 								': ' + bytesToSize(JSON.parse(markedTabs[j]).amount);
@@ -180,11 +182,11 @@ exports.rollbackTitles = function () {
 
 	for each(var tab in tabs) {
 
-		if (parseInt(Preference.get("memoryUsageOnTabTitles")) === 0) {
+		if (oldMemoryUsageOnTabTitles === 0) {
 
 			tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title);
 
-		} else if (parseInt(Preference.get("memoryUsageOnTabTitles")) === 1) {
+		} else if (oldMemoryUsageOnTabTitles === 1) {
 
 			tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[0] : tab.title);
 		}
@@ -198,4 +200,8 @@ exports.removeScheduledFunction = function () {
 exports.reinitTimeout = function () {
 
 	timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+};
+
+exports.updateOldMemoryUsageOnTabTitles = function (value) {
+	oldMemoryUsageOnTabTitles = value;
 };

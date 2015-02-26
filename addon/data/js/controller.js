@@ -32,9 +32,7 @@ document.getElementById('memoryIntervalPref').onkeyup = function (event) {
 
 document.getElementById('memoryUsageOnTabTitlesPref').addEventListener("change", function (event) {
 
-	var e = document.getElementById('memoryUsageOnTabTitlesPref');
-
-	self.port.emit("memoryUsageOnTabTitlesSetting", e.options[e.selectedIndex].value);
+	self.port.emit("memoryUsageOnTabTitlesSetting", document.getElementById('memoryUsageOnTabTitlesPref').value);
 }, false);
 
 /*document.getElementById('memoryCautionThresholdPref').onkeyup = function (event) {
@@ -76,7 +74,7 @@ self.port.on("stats", function (stats) {
 	document.getElementById("currentCount").value = parsedStats.currentCount;
 	document.getElementById("memoryTrackingPref").checked = parsedStats.memoryTracking;
 	document.getElementById("memoryIntervalPref").value = parsedStats.memoryInterval;
-	document.getElementById("memoryUsageOnTabTitlesPref").selectedIndex = parseInt(parsedStats.memoryUsageOnTabTitles);
+	document.getElementById("memoryUsageOnTabTitlesPref").value = parsedStats.memoryUsageOnTabTitles;
 	//document.getElementById("memoryCautionThresholdPref").value = parsedStats.memoryCautionThreshold;
 	//document.getElementById("memoryCautionColorPref").value = parsedStats.memoryCautionColor;
 });
