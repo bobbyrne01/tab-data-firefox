@@ -13,6 +13,9 @@ var tabs = require("sdk/tabs"),
 	timeoutId,
 	oldMemoryUsageOnTabTitles;
 
+/*
+ * Exported functions
+ */
 exports.init = function () {
 
 	oldMemoryUsageOnTabTitles = parseInt(Preference.get("memoryUsageOnTabTitles"));
@@ -61,6 +64,42 @@ exports.getCurrentCount = function () {
 	return currentCount;
 };
 
+exports.rollbackTitles = function () {
+
+	for each(var tab in tabs) {
+
+		if (oldMemoryUsageOnTabTitles === 0) {
+
+			tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title);
+
+		} else if (oldMemoryUsageOnTabTitles === 1) {
+
+			tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[0] : tab.title);
+		}
+	}
+};
+
+exports.removeScheduledFunction = function () {
+	require("sdk/timers").clearTimeout(timeoutId);
+};
+
+exports.reinitTimeout = function () {
+
+	timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
+};
+
+exports.updateOldMemoryUsageOnTabTitles = function (value) {
+	oldMemoryUsageOnTabTitles = value;
+};
+
+exports.updateMemoryCounters = function () {
+	updateMemoryCounters();
+};
+
+
+/*
+ * Local functions
+ */
 function bytesToSize(bytes) {
 	if (bytes === 0) return '0 Byte';
 	var k = 1000;
@@ -78,10 +117,6 @@ function updateMemoryCounters() {
 	}
 }
 
-exports.updateMemoryCounters = function () {
-	updateMemoryCounters();
-};
-
 function initHandleReport() {
 
 	/*
@@ -89,45 +124,58 @@ function initHandleReport() {
 	 */
 	handleReport = function (process, path, kind, units, amount, description) {
 
+		var tree = '';
+
 		if (path.indexOf('explicit/window-objects/top(') >= 0) {
 
-			if (path.indexOf(', id=') >= 0) {
+			tree = 'explicit/window-objects/top(';
+			parseUrl(tree, path, units, amount);
 
-				var marked = false,
-					index = 0;
+		} else if (path.indexOf('explicit/add-ons') >= 0) {
 
-				for (var i = 0; i < markedTabs.length; i++) {
-					if (JSON.parse(markedTabs[i]).url === path.split(', id=')[0].split('explicit/window-objects/top(')[1]) {
-						marked = true;
-						index = i;
-					}
-				}
-
-				if (!marked) {
-
-					obj = JSON.stringify({
-						url: path.split(', id=')[0].split('explicit/window-objects/top(')[1],
-						units: units,
-						amount: amount
-					});
-
-					markedTabs.push(obj);
-
-				} else {
-
-					obj = JSON.parse(markedTabs[index]);
-
-					obj.amount = obj.amount + amount;
-
-					markedTabs[index] = JSON.stringify({
-						url: obj.url,
-						units: obj.units,
-						amount: obj.amount
-					});
-				}
-			}
+			tree = 'window-objects/top(';
+			parseUrl(tree, path, units, amount);
 		}
 	};
+}
+
+function parseUrl(tree, path, units, amount) {
+
+	if (path.indexOf(', id=') >= 0) {
+
+		var marked = false,
+			index = 0;
+
+		for (var i = 0; i < markedTabs.length; i++) {
+			if (JSON.parse(markedTabs[i]).url === path.split(', id=')[0].split(tree)[1]) {
+				marked = true;
+				index = i;
+			}
+		}
+
+		if (!marked) {
+
+			obj = JSON.stringify({
+				url: path.split(', id=')[0].split(tree)[1],
+				units: units,
+				amount: amount
+			});
+
+			markedTabs.push(obj);
+
+		} else {
+
+			obj = JSON.parse(markedTabs[index]);
+
+			obj.amount = obj.amount + amount;
+
+			markedTabs[index] = JSON.stringify({
+				url: obj.url,
+				units: obj.units,
+				amount: obj.amount
+			});
+		}
+	}
 }
 
 function initFinishReporting() {
@@ -178,31 +226,3 @@ function initFinishReporting() {
 		}
 	};
 }
-
-exports.rollbackTitles = function () {
-
-	for each(var tab in tabs) {
-
-		if (oldMemoryUsageOnTabTitles === 0) {
-
-			tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title);
-
-		} else if (oldMemoryUsageOnTabTitles === 1) {
-
-			tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[0] : tab.title);
-		}
-	}
-};
-
-exports.removeScheduledFunction = function () {
-	require("sdk/timers").clearTimeout(timeoutId);
-};
-
-exports.reinitTimeout = function () {
-
-	timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
-};
-
-exports.updateOldMemoryUsageOnTabTitles = function (value) {
-	oldMemoryUsageOnTabTitles = value;
-};
