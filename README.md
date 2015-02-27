@@ -12,8 +12,10 @@ Provides user with tab related stats/data
 * How many tabs are currently open
 * How many tabs have been opened during this Firefox session
 * How many tabs have been opened since addon installed
-* Prepend, append or disable tab memory usage in title
 * Preference to toggle tab memory usage on/off
+* Memory usage displayed on panel UI (JSON or Plain)
+* Preference to include url on memory usage panel UI
+* Prepend, append or disable tab memory usage in title
 * Preference to set interval between memory usage collection
 * Perform a garbage collection
 
@@ -21,9 +23,9 @@ Provides user with tab related stats/data
 
 The addon uses the [nsIMemoryReporterManager](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIMemoryReporterManager) interface to extract memory statistics from `Firefox`, specifically the `getReports()` method.
 
-For each process, data is parsed from the `explicit` tree (which represents all the memory allocated via explicit calls to allocation functions). More specifically, from the `explicit/window-objects/` tree path (which represents all JavaScript `window` objects) only if the leaf node contains an `id` and a `url` matching a currently open tab, otherwise the node is disregarded.
+For each process, data is parsed from the `explicit` tree (which represents all the memory allocated via explicit calls to allocation functions). More specifically, from the `explicit/window-objects/` and `explicit/add-ons/*/window-objects/` tree paths (which represents all JavaScript `window` objects) only if the leaf node contains an `id` and a `url` matching a currently open tab, otherwise the node is disregarded.
 
-Measurements use bytes as their unit and the value of each leaf node is the sum of all its children, therefore the value displayed in a tab title corresponds to a child of `explicit/window-objects/`.
+Measurements use bytes as their unit and the value of each leaf node is the sum of all its children, therefore the value displayed in a tab title corresponds to a child of `explicit/window-objects/` or `explicit/add-ons/*/window-objects/`.
 
 ### Development
 
