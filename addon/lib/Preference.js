@@ -44,4 +44,6 @@ function onPrefMemTrackChange(name) {
 function onPrefMemPlacementChange() {
 	Tab.rollbackTitles();
 	Tab.updateOldMemoryUsageOnTabTitles(preference.prefs.memoryUsageOnTabTitles);
+	Tab.removeScheduledFunction();
+	Tab.updateMemoryCounters();
 }
