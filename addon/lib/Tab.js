@@ -84,7 +84,6 @@ exports.removeScheduledFunction = function () {
 };
 
 exports.reinitTimeout = function () {
-
 	timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
 };
 
@@ -185,44 +184,41 @@ function initFinishReporting() {
 	 */
 	finishReporting = function () {
 
-		if (Preference.get("memoryUsageOnTabTitles") !== 2) {
+		var memoryDump = [];
 
-			var memoryDump = [];
+		for each(var tab in tabs) {
 
-			for each(var tab in tabs) {
+			for (var j = 0; j < markedTabs.length; j++) {
 
-				for (var j = 0; j < markedTabs.length; j++) {
+				var repl = JSON.parse(markedTabs[j]).url.replace(/\\/g, "/");
 
-					var repl = JSON.parse(markedTabs[j]).url.replace(/\\/g, "/");
+				if (repl.indexOf(tab.url) >= 0) {
 
-					if (repl.indexOf(tab.url) >= 0) {
+					if (JSON.parse(markedTabs[j]).amount >= (Preference.get('memoryCautionThreshold') * 1000000)) {
+						//console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
+					}
 
-						if (JSON.parse(markedTabs[j]).amount >= (Preference.get('memoryCautionThreshold') * 1000000)) {
-							//console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
-						}
+					memoryDump.push({
+						Title: (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title),
+						Memory: bytesToSize(JSON.parse(markedTabs[j]).amount),
+						Url: tab.url
+					});
 
-						memoryDump.push({
-							Title: (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title),
-							Memory: bytesToSize(JSON.parse(markedTabs[j]).amount),
-							Url: tab.url
-						});
+					if (Preference.get("memoryUsageOnTabTitles") === 0) {
 
-						if (Preference.get("memoryUsageOnTabTitles") === 0) {
+						tab.title = bytesToSize(
+								JSON.parse(markedTabs[j]).amount) + ': ' +
+							(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
 
-							tab.title = bytesToSize(
-									JSON.parse(markedTabs[j]).amount) + ': ' +
-								(tab.title.indexOf('B: ') >= 0 ? tab.title.split('B: ')[1] : tab.title);
+					} else if (Preference.get("memoryUsageOnTabTitles") === 1) {
 
-						} else if (Preference.get("memoryUsageOnTabTitles") === 1) {
-
-							tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[0] : tab.title) +
-								': ' + bytesToSize(JSON.parse(markedTabs[j]).amount);
-						}
+						tab.title = (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[0] : tab.title) +
+							': ' + bytesToSize(JSON.parse(markedTabs[j]).amount);
 					}
 				}
 			}
-
-			Panel.get().port.emit("memoryDump", JSON.stringify(memoryDump));
 		}
+
+		Panel.get().port.emit("memoryDump", JSON.stringify(memoryDump));
 	};
 }

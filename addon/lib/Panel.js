@@ -58,6 +58,8 @@ exports.init = function () {
 
 	panel.port.on("memoryFormatSetting", function (value) {
 		Preference.set('memoryFormat', parseInt(value));
+		Tab.removeScheduledFunction();
+		Tab.updateMemoryCounters();
 	});
 
 	panel.port.on("memoryUrlInUsageSetting", function (value) {
