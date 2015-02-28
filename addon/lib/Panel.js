@@ -12,7 +12,6 @@ exports.init = function () {
 		width: 500,
 		height: 350,
 		contentURL: Data.get("html/view.html"),
-		contentScriptFile: Data.get("js/controller.js"),
 		onShow: function () {
 
 			var stats = JSON.stringify({

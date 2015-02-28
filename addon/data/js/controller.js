@@ -1,3 +1,9 @@
+var data = {
+	labels: [],
+	datasets: []
+};
+
+
 /*
  * Event listeners
  */
@@ -5,14 +11,14 @@ document.getElementById('memoryTrackingPref').addEventListener("change", functio
 
 	if (document.getElementById('memoryTrackingPref').checked) {
 
-		self.port.emit("memoryTrackingSetting", true);
+		addon.port.emit("memoryTrackingSetting", true);
 		document.getElementById('memoryIntervalPref').disabled = false;
 		document.getElementById('memoryUsageOnTabTitlesPref').disabled = false;
 		document.getElementById('memoryUrlInUsage').disabled = false;
 
 	} else {
 
-		self.port.emit("memoryTrackingSetting", false);
+		addon.port.emit("memoryTrackingSetting", false);
 		document.getElementById('memoryIntervalPref').disabled = true;
 		document.getElementById('memoryUsageOnTabTitlesPref').disabled = true;
 		document.getElementById('memoryUrlInUsage').disabled = true;
@@ -25,7 +31,7 @@ document.getElementById('memoryIntervalPref').onkeyup = function (event) {
 
 	if (document.getElementById('memoryIntervalPref').value >= 1) {
 
-		self.port.emit("memoryIntervalSetting", document.getElementById('memoryIntervalPref').value);
+		addon.port.emit("memoryIntervalSetting", document.getElementById('memoryIntervalPref').value);
 		document.getElementById('memoryIntervalPref').className = 'green';
 
 	} else {
@@ -36,17 +42,17 @@ document.getElementById('memoryIntervalPref').onkeyup = function (event) {
 
 document.getElementById('memoryFormat').addEventListener("change", function (event) {
 
-	self.port.emit("memoryFormatSetting", document.getElementById('memoryFormat').value);
+	addon.port.emit("memoryFormatSetting", document.getElementById('memoryFormat').value);
 }, false);
 
 document.getElementById('memoryUsageOnTabTitlesPref').addEventListener("change", function (event) {
 
-	self.port.emit("memoryUsageOnTabTitlesSetting", document.getElementById('memoryUsageOnTabTitlesPref').value);
+	addon.port.emit("memoryUsageOnTabTitlesSetting", document.getElementById('memoryUsageOnTabTitlesPref').value);
 }, false);
 
 document.getElementById('memoryUrlInUsage').addEventListener("change", function (event) {
 
-	self.port.emit("memoryUrlInUsageSetting", document.getElementById('memoryUrlInUsage').checked);
+	addon.port.emit("memoryUrlInUsageSetting", document.getElementById('memoryUrlInUsage').checked);
 }, false);
 
 /*document.getElementById('memoryCautionThresholdPref').onkeyup = function (event) {
@@ -68,7 +74,7 @@ document.getElementById('memoryCautionColorPref').onkeyup = function (event) {
 
 document.getElementById('schedulePreciseGC').addEventListener("click", function (event) {
 	document.getElementById('schedulePreciseGC').disabled = true;
-	self.port.emit("schedulePreciseGC", '');
+	addon.port.emit("schedulePreciseGC", '');
 }, false);
 
 
@@ -76,7 +82,7 @@ document.getElementById('schedulePreciseGC').addEventListener("click", function 
 /*
  * Listen for add-on messages
  */
-self.port.on("stats", function (stats) {
+addon.port.on("stats", function (stats) {
 	var parsedStats = JSON.parse(stats);
 
 	document.getElementById("globalCount").value = parsedStats.globalCount;
@@ -91,10 +97,13 @@ self.port.on("stats", function (stats) {
 	//document.getElementById("memoryCautionColorPref").value = parsedStats.memoryCautionColor;
 });
 
-self.port.on("memoryDump", function (value) {
+addon.port.on("memoryDump", function (value) {
 
+	var dump = JSON.parse(value).memoryDump;
+	var graphData = JSON.parse(value).graphData;
 	document.getElementById("memoryDump").textContent = '';
-	var dump = JSON.parse(value);
+
+	updateCanvas(JSON.parse(graphData));
 
 	if (parseInt(document.getElementById('memoryFormat').value) === 0) { // JSON
 
@@ -140,7 +149,7 @@ self.port.on("memoryDump", function (value) {
 	}
 });
 
-self.port.on("schedulePreciseGC", function (value) {
+addon.port.on("schedulePreciseGC", function (value) {
 	document.getElementById('schedulePreciseGCStatus').textContent = value;
 	document.getElementById('schedulePreciseGC').disabled = false;
 	setTimeout(function () {
@@ -171,4 +180,13 @@ function syntaxHighlight(json) {
 		}
 		return '<span class="' + cls + '">' + match + '</span>';
 	});
+}
+
+function updateCanvas(graphData) {
+	myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).Line(
+		graphData, {
+			animation: false,
+			showTooltips: false,
+			responsive: false
+		});
 }

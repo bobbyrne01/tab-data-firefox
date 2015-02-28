@@ -11,7 +11,8 @@ var tabs = require("sdk/tabs"),
 	finishReporting,
 	obj,
 	timeoutId,
-	oldMemoryUsageOnTabTitles;
+	oldMemoryUsageOnTabTitles,
+	graphData = {};
 
 /*
  * Exported functions
@@ -50,6 +51,9 @@ exports.init = function () {
 	if (Preference.get("memoryTracking")) {
 		timeoutId = require("sdk/timers").setTimeout(updateMemoryCounters, Preference.get("memoryInterval") * 1000);
 	}
+
+	graphData.labels = [];
+	graphData.datasets = [];
 };
 
 exports.getGlobalCount = function () {
@@ -186,6 +190,13 @@ function initFinishReporting() {
 
 		var memoryDump = [];
 
+		if (graphData.labels.length === 10) {
+			graphData.labels.pop();
+		}
+
+		var date = new Date();
+		graphData.labels.push(date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds());
+
 		for each(var tab in tabs) {
 
 			for (var j = 0; j < markedTabs.length; j++) {
@@ -201,8 +212,38 @@ function initFinishReporting() {
 					memoryDump.push({
 						Title: (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title),
 						Memory: bytesToSize(JSON.parse(markedTabs[j]).amount),
-						Url: tab.url
+						Url: tab.url,
 					});
+
+					var init = true;
+
+					for (var k = 0; k < graphData.datasets.length; k++) {
+
+						if (graphData.datasets[k].label === memoryDump[memoryDump.length - 1].Title) {
+
+							if (graphData.datasets[k].data.length === 10) {
+								graphData.datasets[k].data.shift();
+							}
+
+							graphData.datasets[k].data.push((JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2));
+
+							init = false;
+						}
+					}
+
+					if (init) {
+
+						graphData.datasets.push({
+							label: memoryDump[memoryDump.length - 1].Title,
+							fillColor: "rgba(220,220,220,0.2)",
+							strokeColor: "rgba(220,220,220,1)",
+							pointColor: "rgba(220,220,220,1)",
+							pointStrokeColor: "#fff",
+							pointHighlightFill: "#fff",
+							pointHighlightStroke: "rgba(220,220,220,1)",
+							data: [(JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
+						});
+					}
 
 					if (Preference.get("memoryUsageOnTabTitles") === 0) {
 
@@ -219,6 +260,11 @@ function initFinishReporting() {
 			}
 		}
 
-		Panel.get().port.emit("memoryDump", JSON.stringify(memoryDump));
+		var payload = JSON.stringify({
+			memoryDump: memoryDump,
+			graphData: JSON.stringify(graphData)
+		});
+
+		Panel.get().port.emit("memoryDump", payload);
 	};
 }

@@ -12,7 +12,7 @@
 	<div class="tabs">
 
 		<div class="tab">
-			<input type="radio" id="tab-1" name="tab-group-1" hidden checked />
+			<input type="radio" id="tab-1" name="tab-group-1" hidden />
 			<label class="tabLabel" for="tab-1">Memory usage</label>
 			<div class="content">
 				<div id="memoryDump"></div>
@@ -20,8 +20,18 @@
 		</div>
 
 		<div class="tab">
-			<input type="radio" id="tab-2" name="tab-group-1" hidden />
-			<label class="tabLabel" for="tab-2">Counts</label>
+			<input type="radio" id="tab-2" name="tab-group-1" hidden checked />
+			<label class="tabLabel" for="tab-2">Graph</label>
+			<div class="content">
+				<div id="graph">
+					<canvas id="canvas" width="400" height="290"></canvas>
+				</div>
+			</div>
+		</div>
+
+		<div class="tab">
+			<input type="radio" id="tab-3" name="tab-group-1" hidden />
+			<label class="tabLabel" for="tab-3">Counts</label>
 			<div class="content">
 				<table>
 					<tr>
@@ -53,8 +63,8 @@
 		</div>
 
 		<div class="tab">
-			<input type="radio" id="tab-3" name="tab-group-1" hidden />
-			<label class="tabLabel" for="tab-3">Settings</label>
+			<input type="radio" id="tab-4" name="tab-group-1" hidden />
+			<label class="tabLabel" for="tab-4">Settings</label>
 			<div class="content">
 				<div id="settingsView">
 					<div id="settings">
@@ -145,6 +155,9 @@
 			</div>
 		</div>
 	</div>
+
+	<script src="../bower_components/Chart.js/Chart.js"></script>
+	<script src="../js/controller.js"></script>
 </body>
 
 </html>
