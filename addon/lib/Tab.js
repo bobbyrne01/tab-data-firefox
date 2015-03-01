@@ -281,7 +281,7 @@ function initFinishReporting() {
 							pointStrokeColor: "#fff",
 							pointHighlightFill: "#fff",
 							pointHighlightStroke: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-							data: [(JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
+							data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
 						});
 
 						if (colorIndex === 4) {
