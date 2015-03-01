@@ -12,7 +12,35 @@ var tabs = require("sdk/tabs"),
 	obj,
 	timeoutId,
 	oldMemoryUsageOnTabTitles,
-	graphData = {};
+	graphData = {},
+	colors = [],
+	colorIndex = 0,
+	red = {
+		r: 255,
+		g: 0,
+		b: 0
+	},
+	green = {
+		r: 0,
+		g: 255,
+		b: 0
+	},
+	blue = {
+		r: 0,
+		g: 0,
+		b: 255
+	},
+	yellow = {
+		r: 255,
+		g: 255,
+		b: 0
+	},
+	black = {
+		r: 0,
+		g: 0,
+		b: 0
+	};
+
 
 /*
  * Exported functions
@@ -54,6 +82,11 @@ exports.init = function () {
 
 	graphData.labels = [];
 	graphData.datasets = [];
+	colors.push(red);
+	colors.push(green);
+	colors.push(blue);
+	colors.push(yellow);
+	colors.push(black);
 };
 
 exports.getGlobalCount = function () {
@@ -153,6 +186,7 @@ function parseUrl(tree, path, units, amount) {
 			if (JSON.parse(markedTabs[i]).url === path.split(', id=')[0].split(tree)[1]) {
 				marked = true;
 				index = i;
+				break;
 			}
 		}
 
@@ -190,25 +224,29 @@ function initFinishReporting() {
 
 		var memoryDump = [];
 
-		if (graphData.labels.length === 10) {
-			graphData.labels.pop();
+		// only 5 datasets on chart can exist at a time
+		if (graphData.labels.length === 5) {
+			graphData.labels.splice(0, 1);
 		}
 
 		var date = new Date();
 		graphData.labels.push(date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds());
 
+		// for any tab
 		for each(var tab in tabs) {
 
+			// which we've collected mem data
 			for (var j = 0; j < markedTabs.length; j++) {
 
 				var repl = JSON.parse(markedTabs[j]).url.replace(/\\/g, "/");
 
 				if (repl.indexOf(tab.url) >= 0) {
 
-					if (JSON.parse(markedTabs[j]).amount >= (Preference.get('memoryCautionThreshold') * 1000000)) {
-						//console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
-					}
+					/*if (JSON.parse(markedTabs[j]).amount >= (Preference.get('memoryCautionThreshold') * 1000000)) {
+						console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
+					}*/
 
+					// format data for panel
 					memoryDump.push({
 						Title: (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title),
 						Memory: bytesToSize(JSON.parse(markedTabs[j]).amount),
@@ -217,17 +255,19 @@ function initFinishReporting() {
 
 					var init = true;
 
+					// format data for chart
 					for (var k = 0; k < graphData.datasets.length; k++) {
 
 						if (graphData.datasets[k].label === memoryDump[memoryDump.length - 1].Title) {
 
-							if (graphData.datasets[k].data.length === 10) {
+							if (graphData.datasets[k].data.length === 5) {
 								graphData.datasets[k].data.shift();
 							}
 
 							graphData.datasets[k].data.push((JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2));
 
 							init = false;
+							break;
 						}
 					}
 
@@ -235,16 +275,23 @@ function initFinishReporting() {
 
 						graphData.datasets.push({
 							label: memoryDump[memoryDump.length - 1].Title,
-							fillColor: "rgba(220,220,220,0.2)",
-							strokeColor: "rgba(220,220,220,1)",
-							pointColor: "rgba(220,220,220,1)",
+							fillColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",0.2)",
+							strokeColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+							pointColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
 							pointStrokeColor: "#fff",
 							pointHighlightFill: "#fff",
-							pointHighlightStroke: "rgba(220,220,220,1)",
+							pointHighlightStroke: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
 							data: [(JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
 						});
+
+						if (colorIndex === 4) {
+							colorIndex = 0;
+						} else {
+							colorIndex++;
+						}
 					}
 
+					// update tab title with mem usage
 					if (Preference.get("memoryUsageOnTabTitles") === 0) {
 
 						tab.title = bytesToSize(
@@ -260,6 +307,30 @@ function initFinishReporting() {
 			}
 		}
 
+		// remove datasets for urls which are no longer open in browser
+		var deletes = [];
+
+		for (var a = 0; a < graphData.datasets.length; a++) {
+
+			var deleted = true;
+
+			for (var l = 0; l < memoryDump.length; l++) {
+
+				if (graphData.datasets[a].label === memoryDump[l].Title) {
+					deleted = false;
+				}
+			}
+
+			if (deleted) {
+				deletes.push(a);
+			}
+		}
+
+		for (var m = 0; m < deletes.length; m++) {
+			graphData.datasets.splice((deletes[m] - m), 1);
+		}
+
+		// send memory data to Panel contentScript
 		var payload = JSON.stringify({
 			memoryDump: memoryDump,
 			graphData: JSON.stringify(graphData)

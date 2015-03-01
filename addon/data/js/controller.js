@@ -187,6 +187,7 @@ function updateCanvas(graphData) {
 		graphData, {
 			animation: false,
 			showTooltips: false,
-			responsive: false
+			responsive: false,
+			scaleLabel : "<%= Number(value).toFixed(2) %>mb"
 		});
 }
