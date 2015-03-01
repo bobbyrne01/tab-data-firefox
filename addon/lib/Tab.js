@@ -264,7 +264,7 @@ function initFinishReporting() {
 								graphData.datasets[k].data.shift();
 							}
 
-							graphData.datasets[k].data.push((JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2));
+							graphData.datasets[k].data.push((JSON.parse(markedTabs[j]).amount / 1000000));
 
 							init = false;
 							break;
@@ -281,7 +281,7 @@ function initFinishReporting() {
 							pointStrokeColor: "#fff",
 							pointHighlightFill: "#fff",
 							pointHighlightStroke: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-							data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
+							data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000)]
 						});
 
 						if (colorIndex === 4) {
