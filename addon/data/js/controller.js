@@ -11,14 +11,14 @@ document.getElementById('memoryTrackingPref').addEventListener("change", functio
 
 	if (document.getElementById('memoryTrackingPref').checked) {
 
-		addon.port.emit("memoryTrackingSetting", true);
+		self.port.emit("memoryTrackingSetting", true);
 		document.getElementById('memoryIntervalPref').disabled = false;
 		document.getElementById('memoryUsageOnTabTitlesPref').disabled = false;
 		document.getElementById('memoryUrlInUsage').disabled = false;
 
 	} else {
 
-		addon.port.emit("memoryTrackingSetting", false);
+		self.port.emit("memoryTrackingSetting", false);
 		document.getElementById('memoryIntervalPref').disabled = true;
 		document.getElementById('memoryUsageOnTabTitlesPref').disabled = true;
 		document.getElementById('memoryUrlInUsage').disabled = true;
@@ -31,7 +31,7 @@ document.getElementById('memoryIntervalPref').onkeyup = function (event) {
 
 	if (document.getElementById('memoryIntervalPref').value >= 1) {
 
-		addon.port.emit("memoryIntervalSetting", document.getElementById('memoryIntervalPref').value);
+		self.port.emit("memoryIntervalSetting", document.getElementById('memoryIntervalPref').value);
 		document.getElementById('memoryIntervalPref').className = 'green';
 
 	} else {
@@ -42,17 +42,17 @@ document.getElementById('memoryIntervalPref').onkeyup = function (event) {
 
 document.getElementById('memoryFormat').addEventListener("change", function (event) {
 
-	addon.port.emit("memoryFormatSetting", document.getElementById('memoryFormat').value);
+	self.port.emit("memoryFormatSetting", document.getElementById('memoryFormat').value);
 }, false);
 
 document.getElementById('memoryUsageOnTabTitlesPref').addEventListener("change", function (event) {
 
-	addon.port.emit("memoryUsageOnTabTitlesSetting", document.getElementById('memoryUsageOnTabTitlesPref').value);
+	self.port.emit("memoryUsageOnTabTitlesSetting", document.getElementById('memoryUsageOnTabTitlesPref').value);
 }, false);
 
 document.getElementById('memoryUrlInUsage').addEventListener("change", function (event) {
 
-	addon.port.emit("memoryUrlInUsageSetting", document.getElementById('memoryUrlInUsage').checked);
+	self.port.emit("memoryUrlInUsageSetting", document.getElementById('memoryUrlInUsage').checked);
 }, false);
 
 /*document.getElementById('memoryCautionThresholdPref').onkeyup = function (event) {
@@ -74,7 +74,7 @@ document.getElementById('memoryCautionColorPref').onkeyup = function (event) {
 
 document.getElementById('schedulePreciseGC').addEventListener("click", function (event) {
 	document.getElementById('schedulePreciseGC').disabled = true;
-	addon.port.emit("schedulePreciseGC", '');
+	self.port.emit("schedulePreciseGC", '');
 }, false);
 
 
@@ -82,7 +82,7 @@ document.getElementById('schedulePreciseGC').addEventListener("click", function 
 /*
  * Listen for add-on messages
  */
-addon.port.on("stats", function (stats) {
+self.port.on("stats", function (stats) {
 	var parsedStats = JSON.parse(stats);
 
 	document.getElementById("globalCount").value = parsedStats.globalCount;
@@ -97,7 +97,7 @@ addon.port.on("stats", function (stats) {
 	//document.getElementById("memoryCautionColorPref").value = parsedStats.memoryCautionColor;
 });
 
-addon.port.on("memoryDump", function (value) {
+self.port.on("memoryDump", function (value) {
 
 	var dump = JSON.parse(value).memoryDump;
 	var graphData = JSON.parse(value).graphData;
@@ -149,7 +149,7 @@ addon.port.on("memoryDump", function (value) {
 	}
 });
 
-addon.port.on("schedulePreciseGC", function (value) {
+self.port.on("schedulePreciseGC", function (value) {
 	document.getElementById('schedulePreciseGCStatus').textContent = value;
 	document.getElementById('schedulePreciseGC').disabled = false;
 	setTimeout(function () {
