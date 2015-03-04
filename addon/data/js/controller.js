@@ -188,6 +188,7 @@ function updateCanvas(graphData) {
 			animation: false,
 			showTooltips: false,
 			responsive: false,
-			scaleLabel : "<%= Number(value).toFixed(2) %>mb"
+			pointDot: false,
+			scaleLabel: "<%= Number(value).toFixed(2) %>mb"
 		});
 }
