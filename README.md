@@ -17,6 +17,7 @@ Provides user with tab related stats/data
 * Preference to include url on memory usage panel UI
 * Prepend, append or disable tab memory usage in title
 * Preference to set interval between memory usage collection
+* Top 5 memory consumers drawn on line chart 
 * Perform a garbage collection
 
 ### Monitoring memory 

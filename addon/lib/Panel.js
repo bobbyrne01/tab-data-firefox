@@ -12,7 +12,7 @@ exports.init = function () {
 		width: 525,
 		height: 475,
 		contentURL: Data.get("html/view.html"),
-		contentScriptFile: [Data.get("bower_components/Chart.js/Chart.js"), Data.get("js/controller.js")],
+		contentScriptFile: [Data.get("bower_components/Chart.js/Chart.min.js"), Data.get("js/controller.js")],
 		onShow: function () {
 
 			var stats = JSON.stringify({
