@@ -32,7 +32,7 @@ var tabs = require("sdk/tabs"),
 	},
 	yellow = {
 		r: 255,
-		g: 255,
+		g: 153,
 		b: 0
 	},
 	black = {
@@ -215,6 +215,14 @@ function parseUrl(tree, path, units, amount) {
 	}
 }
 
+function compare(a, b) {
+	if (a.data[4] > b.data[4])
+		return -1;
+	if (a.data[4] < b.data[4])
+		return 1;
+	return 0;
+}
+
 function initFinishReporting() {
 
 	/*
@@ -264,7 +272,7 @@ function initFinishReporting() {
 								graphData.datasets[k].data.shift();
 							}
 
-							graphData.datasets[k].data.push((JSON.parse(markedTabs[j]).amount / 1000000));
+							graphData.datasets[k].data.push((JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2));
 
 							init = false;
 							break;
@@ -273,23 +281,53 @@ function initFinishReporting() {
 
 					if (init) {
 
-						graphData.datasets.push({
-							label: memoryDump[memoryDump.length - 1].Title,
-							fillColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",0.2)",
-							strokeColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-							pointColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-							pointStrokeColor: "#fff",
-							pointHighlightFill: "#fff",
-							pointHighlightStroke: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-							data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000)]
-						});
+						if (graphData.datasets.length <= 4) {
 
-						if (colorIndex === 4) {
-							colorIndex = 0;
+							graphData.datasets.push({
+								label: memoryDump[memoryDump.length - 1].Title,
+								fillColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",0.2)",
+								strokeColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+								pointColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+								pointStrokeColor: "#fff",
+								pointHighlightFill: "#fff",
+								pointHighlightStroke: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+								data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
+							});
+
+							if (colorIndex === 4) {
+								colorIndex = 0;
+							} else {
+								colorIndex++;
+							}
+
 						} else {
-							colorIndex++;
+
+							if ((JSON.parse(markedTabs[j]).amount / 1000000) > graphData.datasets[4].data[4]) {
+
+								graphData.datasets.splice([4], 1);
+
+								graphData.datasets.push({
+									label: memoryDump[memoryDump.length - 1].Title,
+									fillColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",0.2)",
+									strokeColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+									pointColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+									pointStrokeColor: "#fff",
+									pointHighlightFill: "#fff",
+									pointHighlightStroke: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+									data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
+								});
+
+								if (colorIndex === 4) {
+									colorIndex = 0;
+								} else {
+									colorIndex++;
+								}
+							}
 						}
 					}
+
+					// sort datasets, highest amount to lowest
+					graphData.datasets.sort(compare);
 
 					// update tab title with mem usage
 					if (Preference.get("memoryUsageOnTabTitles") === 0) {

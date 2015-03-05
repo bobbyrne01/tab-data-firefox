@@ -202,7 +202,7 @@ function updateCanvas(graphData) {
 		ul.appendChild(li);
 
 		var label = document.createElement('label');
-		label.appendChild(document.createTextNode(graphData.datasets[i].label));
+		label.appendChild(document.createTextNode(graphData.datasets[i].data[4] + ': ' + graphData.datasets[i].label));
 		label.className = 'boldText';
 		label.style.color = graphData.datasets[i].strokeColor;
 		li.appendChild(label);
