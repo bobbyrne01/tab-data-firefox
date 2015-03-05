@@ -9,8 +9,8 @@ var Panel = require("sdk/panel"),
 exports.init = function () {
 
 	panel = Panel.Panel({
-		width: 500,
-		height: 450,
+		width: 525,
+		height: 475,
 		contentURL: Data.get("html/view.html"),
 		contentScriptFile: [Data.get("bower_components/Chart.js/Chart.js"), Data.get("js/controller.js")],
 		onShow: function () {
@@ -64,6 +64,8 @@ exports.init = function () {
 
 	panel.port.on("memoryUrlInUsageSetting", function (value) {
 		Preference.set('memoryUrlInUsage', value);
+		Tab.removeScheduledFunction();
+		Tab.updateMemoryCounters();
 	});
 
 	panel.port.on("memoryCautionThresholdSetting", function (value) {

@@ -209,5 +209,4 @@ function updateCanvas(graphData) {
 	}
 
 	document.getElementById('legend').appendChild(ul);
-
 }
