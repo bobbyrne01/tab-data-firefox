@@ -10,7 +10,7 @@ exports.init = function () {
 
 	panel = Panel.Panel({
 		width: 500,
-		height: 350,
+		height: 450,
 		contentURL: Data.get("html/view.html"),
 		contentScriptFile: [Data.get("bower_components/Chart.js/Chart.js"), Data.get("js/controller.js")],
 		onShow: function () {

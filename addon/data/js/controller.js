@@ -191,4 +191,23 @@ function updateCanvas(graphData) {
 			pointDot: false,
 			scaleLabel: "<%= Number(value).toFixed(2) %>mb"
 		});
+
+	document.getElementById('legend').textContent = '';
+
+	var ul = document.createElement('ul');
+
+	for (var i = 0; i < graphData.datasets.length; i++) {
+
+		var li = document.createElement('li');
+		ul.appendChild(li);
+
+		var label = document.createElement('label');
+		label.appendChild(document.createTextNode(graphData.datasets[i].label));
+		label.className = 'boldText';
+		label.style.color = graphData.datasets[i].strokeColor;
+		li.appendChild(label);
+	}
+
+	document.getElementById('legend').appendChild(ul);
+
 }

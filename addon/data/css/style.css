@@ -11,6 +11,10 @@ html, body {
 	background-color: #FF5050;
 }
 
+.boldText{
+    font-weight: bold;
+}
+
 
 /*
  * Tabs
