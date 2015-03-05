@@ -31,6 +31,7 @@ Measurements use bytes as their unit and the value of each leaf node is the sum 
 ### Development
 
     npm install
+    bower install
     grunt
     
 ### Run
