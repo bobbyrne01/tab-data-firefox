@@ -165,58 +165,50 @@ function initHandleReport() {
 	 */
 	handleReport = function (process, path, kind, units, amount, description) {
 
-		var tree = '';
+		if (path.indexOf('explicit/window-objects/top(') >= 0 && path.indexOf(', id=') >= 0) {
 
-		if (path.indexOf('explicit/window-objects/top(') >= 0) {
+			parseUrl('explicit/window-objects/top(', path, units, amount);
 
-			tree = 'explicit/window-objects/top(';
-			parseUrl(tree, path, units, amount);
+		} else if (path.indexOf('explicit/add-ons') >= 0 && path.indexOf(', id=') >= 0) {
 
-		} else if (path.indexOf('explicit/add-ons') >= 0) {
-
-			tree = 'window-objects/top(';
-			parseUrl(tree, path, units, amount);
+			parseUrl('window-objects/top(', path, units, amount);
 		}
 	};
 }
 
 function parseUrl(tree, path, units, amount) {
 
-	if (path.indexOf(', id=') >= 0) {
+	var marked = false,
+		index = 0;
 
-		var marked = false,
-			index = 0;
-
-		for (var i = 0; i < markedTabs.length; i++) {
-			if (JSON.parse(markedTabs[i]).url === path.split(', id=')[0].split(tree)[1]) {
-				marked = true;
-				index = i;
-				break;
-			}
+	for (var i = 0; i < markedTabs.length; i++) {
+		if (JSON.parse(markedTabs[i]).url === path.split(', id=')[0].split(tree)[1]) {
+			marked = true;
+			index = i;
+			break;
 		}
+	}
 
-		if (!marked) {
+	if (!marked) {
 
-			obj = JSON.stringify({
-				url: path.split(', id=')[0].split(tree)[1],
-				units: units,
-				amount: amount
-			});
+		obj = JSON.stringify({
+			url: path.split(', id=')[0].split(tree)[1],
+			units: units,
+			amount: amount
+		});
 
-			markedTabs.push(obj);
+		markedTabs.push(obj);
 
-		} else {
+	} else {
 
-			obj = JSON.parse(markedTabs[index]);
+		obj = JSON.parse(markedTabs[index]);
+		obj.amount = obj.amount + amount;
 
-			obj.amount = obj.amount + amount;
-
-			markedTabs[index] = JSON.stringify({
-				url: obj.url,
-				units: obj.units,
-				amount: obj.amount
-			});
-		}
+		markedTabs[index] = JSON.stringify({
+			url: obj.url,
+			units: obj.units,
+			amount: obj.amount
+		});
 	}
 }
 
@@ -284,13 +276,13 @@ function initFinishReporting() {
 
 						var nextColor;
 
-						for (var d = 0; d < colors.length; d++) {
-							if (!colors[d].used) {
-								nextColor = colors[d];
-							}
-						}
-
 						if (graphData.datasets.length <= 4) {
+
+							for (var d = 0; d < colors.length; d++) {
+								if (!colors[d].used) {
+									nextColor = colors[d];
+								}
+							}
 
 							graphData.datasets.push({
 								label: memoryDump[memoryDump.length - 1].Title,
@@ -310,6 +302,7 @@ function initFinishReporting() {
 
 							if ((JSON.parse(markedTabs[j]).amount / 1000000) > graphData.datasets[4].data[4]) {
 
+								nextColor = graphData.datasets[4].color;
 								graphData.datasets.splice(4, 1);
 
 								graphData.datasets.push({
@@ -323,8 +316,6 @@ function initFinishReporting() {
 									data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)],
 									color: nextColor
 								});
-
-								nextColor.used = true;
 							}
 						}
 					}
@@ -375,11 +366,6 @@ function initFinishReporting() {
 			}
 
 			graphData.datasets.splice((deletes[m] - m), 1);
-		}
-		
-		for (var h = 0; h < graphData.datasets.length; h++){
-			
-			console.log(graphData.datasets[h].data[4]);
 		}
 
 		// send memory data to Panel contentScript
