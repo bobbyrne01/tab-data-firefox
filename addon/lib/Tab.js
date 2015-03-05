@@ -18,27 +18,32 @@ var tabs = require("sdk/tabs"),
 	red = {
 		r: 255,
 		g: 0,
-		b: 0
+		b: 0,
+		used: false
 	},
 	green = {
 		r: 0,
 		g: 255,
-		b: 0
+		b: 0,
+		used: false
 	},
 	blue = {
 		r: 0,
 		g: 0,
-		b: 255
+		b: 255,
+		used: false
 	},
 	yellow = {
 		r: 255,
 		g: 153,
-		b: 0
+		b: 0,
+		used: false
 	},
 	black = {
 		r: 0,
 		g: 0,
-		b: 0
+		b: 0,
+		used: false
 	};
 
 
@@ -216,11 +221,7 @@ function parseUrl(tree, path, units, amount) {
 }
 
 function compare(a, b) {
-	if (a.data[4] > b.data[4])
-		return -1;
-	if (a.data[4] < b.data[4])
-		return 1;
-	return 0;
+	return b.data[4] - a.data[4];
 }
 
 function initFinishReporting() {
@@ -281,47 +282,49 @@ function initFinishReporting() {
 
 					if (init) {
 
+						var nextColor;
+
+						for (var d = 0; d < colors.length; d++) {
+							if (!colors[d].used) {
+								nextColor = colors[d];
+							}
+						}
+
 						if (graphData.datasets.length <= 4) {
 
 							graphData.datasets.push({
 								label: memoryDump[memoryDump.length - 1].Title,
-								fillColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",0.2)",
-								strokeColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-								pointColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+								fillColor: "rgba(" + nextColor.r + "," + nextColor.g + "," + nextColor.b + ",0.2)",
+								strokeColor: "rgba(" + nextColor.r + "," + nextColor.g + "," + nextColor.b + ",1)",
+								pointColor: "rgba(" + nextColor.r + "," + nextColor.g + "," + nextColor.b + ",1)",
 								pointStrokeColor: "#fff",
 								pointHighlightFill: "#fff",
-								pointHighlightStroke: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-								data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
+								pointHighlightStroke: "rgba(" + nextColor.r + "," + nextColor.g + "," + nextColor.b + ",1)",
+								data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)],
+								color: nextColor
 							});
 
-							if (colorIndex === 4) {
-								colorIndex = 0;
-							} else {
-								colorIndex++;
-							}
+							nextColor.used = true;
 
 						} else {
 
 							if ((JSON.parse(markedTabs[j]).amount / 1000000) > graphData.datasets[4].data[4]) {
 
-								graphData.datasets.splice([4], 1);
+								graphData.datasets.splice(4, 1);
 
 								graphData.datasets.push({
 									label: memoryDump[memoryDump.length - 1].Title,
-									fillColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",0.2)",
-									strokeColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-									pointColor: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
+									fillColor: "rgba(" + nextColor.r + "," + nextColor.g + "," + nextColor.b + ",0.2)",
+									strokeColor: "rgba(" + nextColor.r + "," + nextColor.g + "," + nextColor.b + ",1)",
+									pointColor: "rgba(" + nextColor.r + "," + nextColor.g + "," + nextColor.b + ",1)",
 									pointStrokeColor: "#fff",
 									pointHighlightFill: "#fff",
-									pointHighlightStroke: "rgba(" + colors[colorIndex].r + "," + colors[colorIndex].g + "," + colors[colorIndex].b + ",1)",
-									data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)]
+									pointHighlightStroke: "rgba(" + nextColor.r + "," + nextColor.g + "," + nextColor.b + ",1)",
+									data: [0, 0, 0, 0, (JSON.parse(markedTabs[j]).amount / 1000000).toFixed(2)],
+									color: nextColor
 								});
 
-								if (colorIndex === 4) {
-									colorIndex = 0;
-								} else {
-									colorIndex++;
-								}
+								nextColor.used = true;
 							}
 						}
 					}
@@ -365,7 +368,18 @@ function initFinishReporting() {
 		}
 
 		for (var m = 0; m < deletes.length; m++) {
+			for (var n = 0; n < colors.length; n++) {
+				if (colors[n] === graphData.datasets[(deletes[m] - m)].color) {
+					colors[n].used = false;
+				}
+			}
+
 			graphData.datasets.splice((deletes[m] - m), 1);
+		}
+		
+		for (var h = 0; h < graphData.datasets.length; h++){
+			
+			console.log(graphData.datasets[h].data[4]);
 		}
 
 		// send memory data to Panel contentScript
