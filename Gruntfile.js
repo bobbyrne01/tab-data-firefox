@@ -75,7 +75,7 @@ module.exports = function (grunt) {
 		release: {
 			options: {
 				file: 'package.json',
-				additionalFiles: ['addon/package.json', 'addon/bower.json'],
+				additionalFiles: ['addon/package.json', 'bower.json'],
 				bump: true,
 				add: true,
 				commit: true,
