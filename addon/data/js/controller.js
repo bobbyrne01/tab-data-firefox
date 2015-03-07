@@ -188,8 +188,7 @@ function updateCanvas(graphData) {
 			animation: false,
 			showTooltips: false,
 			responsive: false,
-			pointDot: false,
-			scaleLabel: "<%= Number(value).toFixed(2) %>mb"
+			pointDot: false
 		});
 
 	document.getElementById('legend').textContent = '';
