@@ -9,8 +9,8 @@ var Panel = require("sdk/panel"),
 exports.init = function () {
 
 	panel = Panel.Panel({
-		width: 525,
-		height: 475,
+		width: parseInt(Preference.get("panelWidth")),
+		height: parseInt(Preference.get("panelHeight")),
 		contentURL: Data.get("html/view.html"),
 		contentScriptFile: [Data.get("bower_components/Chart.js/Chart.min.js"), Data.get("js/controller.js")],
 		onShow: function () {
@@ -24,8 +24,8 @@ exports.init = function () {
 				memoryFormat: Preference.get("memoryFormat"),
 				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles"),
 				memoryUrlInUsage: Preference.get("memoryUrlInUsage"),
-				memoryCautionThreshold: Preference.get("memoryCautionThreshold"),
-				memoryCautionColor: Preference.get("memoryCautionColor")
+				panelWidth: Preference.get("panelWidth"),
+				panelHeight: Preference.get("panelHeight")
 			});
 
 			panel.port.emit("stats", stats);
@@ -68,20 +68,22 @@ exports.init = function () {
 		Tab.updateMemoryCounters();
 	});
 
-	panel.port.on("memoryCautionThresholdSetting", function (value) {
-		Preference.set('memoryCautionThreshold', value);
-	});
-
-	panel.port.on("memoryCautionColorSetting", function (value) {
-		Preference.set('memoryCautionColor', value);
-	});
-
 	panel.port.on("schedulePreciseGC", function (value) {
 		Chrome.gc(panel);
 	});
 
-	panel.port.on("garbageCollect", function (value) {
-		// TODO implement
+	panel.port.on("panelWidth", function (value) {
+		Preference.set('panelWidth', value);
+		panel.resize(
+			parseInt(Preference.get("panelWidth")),
+			parseInt(Preference.get("panelHeight")));
+	});
+
+	panel.port.on("panelHeight", function (value) {
+		Preference.set('panelHeight', value);
+		panel.resize(
+			parseInt(Preference.get("panelWidth")),
+			parseInt(Preference.get("panelHeight")));
 	});
 };
 

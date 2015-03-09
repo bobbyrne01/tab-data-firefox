@@ -55,27 +55,38 @@ document.getElementById('memoryUrlInUsage').addEventListener("change", function 
 	self.port.emit("memoryUrlInUsageSetting", document.getElementById('memoryUrlInUsage').checked);
 }, false);
 
-/*document.getElementById('memoryCautionThresholdPref').onkeyup = function (event) {
-
-	if (parseInt(document.getElementById('memoryCautionThresholdPref').value) >= 0) {
-
-		self.port.emit("memoryCautionThresholdSetting", document.getElementById('memoryCautionThresholdPref').value);
-		document.getElementById('memoryCautionThresholdPref').className = 'green';
-
-	} else {
-
-		document.getElementById('memoryCautionThresholdPref').className = 'red';
-	}
-};
-
-document.getElementById('memoryCautionColorPref').onkeyup = function (event) {
-	self.port.emit("memoryCautionColorPrefSetting", document.getElementById('memoryCautionColorPref').value);
-};*/
-
 document.getElementById('schedulePreciseGC').addEventListener("click", function (event) {
 	document.getElementById('schedulePreciseGC').disabled = true;
 	self.port.emit("schedulePreciseGC", '');
 }, false);
+
+document.getElementById('panelWidth').onkeyup = function (event) {
+
+	if (document.getElementById('panelWidth').value >= 1) {
+
+		self.port.emit("panelWidth", document.getElementById('panelWidth').value);
+		document.getElementById('panelWidth').className = 'green';
+		document.getElementById("canvas").width = document.getElementById('panelWidth').value - 45;
+
+	} else {
+
+		document.getElementById('panelWidth').className = 'red';
+	}
+};
+
+document.getElementById('panelHeight').onkeyup = function (event) {
+
+	if (document.getElementById('panelHeight').value >= 1) {
+
+		self.port.emit("panelHeight", document.getElementById('panelHeight').value);
+		document.getElementById('panelHeight').className = 'green';
+		document.getElementById("canvas").height = document.getElementById('panelHeight').value - 185;
+
+	} else {
+
+		document.getElementById('panelHeight').className = 'red';
+	}
+};
 
 
 
@@ -93,8 +104,11 @@ self.port.on("stats", function (stats) {
 	document.getElementById("memoryUsageOnTabTitlesPref").value = parsedStats.memoryUsageOnTabTitles;
 	document.getElementById("memoryFormat").value = parsedStats.memoryFormat;
 	document.getElementById("memoryUrlInUsage").checked = parsedStats.memoryUrlInUsage;
-	//document.getElementById("memoryCautionThresholdPref").value = parsedStats.memoryCautionThreshold;
-	//document.getElementById("memoryCautionColorPref").value = parsedStats.memoryCautionColor;
+	document.getElementById("panelWidth").value = parsedStats.panelWidth;
+	document.getElementById("panelHeight").value = parsedStats.panelHeight;
+
+	document.getElementById("canvas").width = parsedStats.panelWidth - 45;
+	document.getElementById("canvas").height = parsedStats.panelHeight - 185;
 });
 
 self.port.on("memoryDump", function (value) {

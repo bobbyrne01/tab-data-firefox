@@ -251,7 +251,7 @@ function initFinishReporting() {
 					memoryDump.push({
 						Title: (tab.title.indexOf(': ') >= 0 ? tab.title.split(': ')[1] : tab.title),
 						Memory: bytesToSize(JSON.parse(markedTabs[j]).amount),
-						Url: tab.url,
+						Url: tab.url
 					});
 
 					var init = true;
