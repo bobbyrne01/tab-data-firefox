@@ -13,7 +13,7 @@
 
 		<div class="tab">
 			<input type="radio" id="tab-1" name="tab-group-1" hidden />
-			<label class="tabLabel" for="tab-1">Memory usage</label>
+			<label class="tabLabel" for="tab-1" data-l10n-id="memoryUsageLabel"></label>
 			<div class="content">
 				<div id="memoryDump"></div>
 			</div>
@@ -21,7 +21,7 @@
 
 		<div class="tab">
 			<input type="radio" id="tab-2" name="tab-group-1" hidden checked />
-			<label class="tabLabel" for="tab-2">Graph</label>
+			<label class="tabLabel" for="tab-2" data-l10n-id="graphLabel"></label>
 			<div class="content">
 				<div id="graph">
 					<canvas id="canvas" width="480" height="290"></canvas>
@@ -32,12 +32,12 @@
 
 		<div class="tab">
 			<input type="radio" id="tab-3" name="tab-group-1" hidden />
-			<label class="tabLabel" for="tab-3">Counts</label>
+			<label class="tabLabel" for="tab-3" data-l10n-id="countsLabel"></label>
 			<div class="content">
 				<table>
 					<tr>
 						<td>
-							<label>Open <b>now</b>: </label>
+							<label data-l10n-id="openNow_title"></label>
 						</td>
 						<td>
 							<input type="text" id="currentCount" disabled size="10" />
@@ -45,7 +45,7 @@
 					</tr>
 					<tr>
 						<td>
-							<label>Opened during <b>session</b>: </label>
+							<label data-l10n-id="openSession_title"></label>
 						</td>
 						<td>
 							<input type="text" id="sessionCount" disabled size="10" />
@@ -53,7 +53,7 @@
 					</tr>
 					<tr>
 						<td>
-							<label>Opened since <b>addon install</b>: </label>
+							<label data-l10n-id="openInstall_title"></label>
 						</td>
 						<td>
 							<input type="text" id="globalCount" disabled size="10" />
@@ -65,14 +65,14 @@
 
 		<div class="tab">
 			<input type="radio" id="tab-4" name="tab-group-1" hidden />
-			<label class="tabLabel" for="tab-4">Settings</label>
+			<label class="tabLabel" for="tab-4" data-l10n-id="settingsLabel"></label>
 			<div class="content">
 				<div id="settingsView">
 					<div id="settings">
 						<table>
 							<tr>
 								<td>
-									<label>Enable memory usage tracking?</label>
+									<label data-l10n-id="memoryTracking_title"></label>
 								</td>
 								<td>
 									<input id="memoryTrackingPref" type="checkbox" />
@@ -80,7 +80,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label>How many <b>seconds</b> between memory data collection?</label>
+									<label data-l10n-id="memoryInterval_title"></label>
 								</td>
 								<td>
 									<input id="memoryIntervalPref" type="number" />
@@ -88,7 +88,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label>Memory usage in tab titles?</label>
+									<label data-l10n-id="memoryUsageOnTabTitlesPref_title"></label>
 								</td>
 								<td>
 									<select id="memoryUsageOnTabTitlesPref">
@@ -100,7 +100,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label>Format of memory usage on panel?</label>
+									<label data-l10n-id="memoryFormat_title"></label>
 								</td>
 								<td>
 									<select id="memoryFormat">
@@ -111,7 +111,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label>Show Url on memory usage panel?</label>
+									<label data-l10n-id="showUrl_title"></label>
 								</td>
 								<td>
 									<input id="memoryUrlInUsage" type="checkbox" />
@@ -119,16 +119,16 @@
 							</tr>
 							<tr>
 								<td>
-									<label>Perform a garbage collection</label>
+									<label data-l10n-id="garbageCollection_title"></label>
 								</td>
 								<td>
-									<button id="schedulePreciseGC">Run</button>
-									<label id="schedulePreciseGCStatus"></label>
+									<button id="schedulePreciseGC" data-l10n-id="run_title"></button>
+									<label id="schedulePreciseGCStatus" style="display: none;">&#10004;</label>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									<label>Width of Panel UI</label>
+									<label data-l10n-id="panelWidth_title"></label>
 								</td>
 								<td>
 									<input id="panelWidth" type="number" />
@@ -136,7 +136,7 @@
 							</tr>
 							<tr>
 								<td>
-									<label>Height of Panel UI</label>
+									<label data-l10n-id="panelHeight_title"></label>
 								</td>
 								<td>
 									<input id="panelHeight" type="number" />

@@ -164,10 +164,10 @@ self.port.on("memoryDump", function (value) {
 });
 
 self.port.on("schedulePreciseGC", function (value) {
-	document.getElementById('schedulePreciseGCStatus').textContent = value;
+	document.getElementById('schedulePreciseGCStatus').style.display = 'inline';
 	document.getElementById('schedulePreciseGC').disabled = false;
 	setTimeout(function () {
-		document.getElementById('schedulePreciseGCStatus').textContent = '';
+		document.getElementById('schedulePreciseGCStatus').style.display = 'none';
 	}, 5000);
 });
 

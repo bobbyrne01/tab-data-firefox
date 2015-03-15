@@ -9,7 +9,7 @@ exports.initMemoryReporterManager = function () {
 exports.gc = function (panel) {
 	Cu.schedulePreciseGC(
 		function () {
-			panel.port.emit('schedulePreciseGC', 'done');
+			panel.port.emit('schedulePreciseGC', '');
 		}
 	);
 };
