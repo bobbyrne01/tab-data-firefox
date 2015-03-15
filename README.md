@@ -29,6 +29,25 @@ For each process, data is parsed from the `explicit` tree (which represents all 
 
 Measurements use bytes as their unit and the value of each leaf node is the sum of all its children, therefore the value displayed in a tab title corresponds to a child of `explicit/window-objects/` or `explicit/add-ons/*/window-objects/`.
 
+### Locale support
+
+* bg
+* cs-CZ
+* de-DE
+* en-GB
+* en-US
+* es-ES
+* fr-FR
+* it-IT
+* ja-JP
+* ko-KR
+* pl-PL
+* pt-PT
+* ru-RU
+* sv-SE
+* uk-UA
+* zh-CN
+
 ### Development
 
     npm install
