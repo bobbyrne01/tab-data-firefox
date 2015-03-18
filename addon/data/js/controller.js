@@ -88,6 +88,11 @@ document.getElementById('panelHeight').onkeyup = function (event) {
 	}
 };
 
+document.getElementById('graphType').addEventListener("change", function (event) {
+
+	self.port.emit("graphTypeSetting", document.getElementById('graphType').value);
+}, false);
+
 
 
 /*
@@ -106,6 +111,7 @@ self.port.on("stats", function (stats) {
 	document.getElementById("memoryUrlInUsage").checked = parsedStats.memoryUrlInUsage;
 	document.getElementById("panelWidth").value = parsedStats.panelWidth;
 	document.getElementById("panelHeight").value = parsedStats.panelHeight;
+	document.getElementById("graphType").value = parsedStats.graphType;
 
 	document.getElementById("canvas").width = parsedStats.panelWidth - 45;
 	document.getElementById("canvas").height = parsedStats.panelHeight - 185;
@@ -197,24 +203,41 @@ function syntaxHighlight(json) {
 }
 
 function updateCanvas(graphData) {
-	myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).Line(
-		graphData, {
-			animation: false,
-			showTooltips: false,
-			responsive: false,
-			pointDot: false
-		});
 
+	var options = {
+		animation: false,
+		showTooltips: false,
+		responsive: false,
+		pointDot: false
+	};
+
+	// determine graph type
+	if (parseInt(document.getElementById("graphType").value) === 0) {
+
+		myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).Line(graphData, options);
+
+	} else if (parseInt(document.getElementById("graphType").value) === 1) {
+
+		myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).Bar(graphData, options);
+
+	} else if (parseInt(document.getElementById("graphType").value) === 2) {
+
+		myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).Radar(graphData, options);
+	}
+
+	// clear previous legend
 	document.getElementById('legend').textContent = '';
 
+	// create legend
 	var ul = document.createElement('ul');
 
 	for (var i = 0; i < graphData.datasets.length; i++) {
 
-		var li = document.createElement('li');
+		var li = document.createElement('li'),
+			label = document.createElement('label');
+
 		ul.appendChild(li);
 
-		var label = document.createElement('label');
 		label.appendChild(document.createTextNode(graphData.datasets[i].data[4] + ': ' + graphData.datasets[i].label));
 		label.className = 'boldText';
 		label.style.color = graphData.datasets[i].strokeColor;

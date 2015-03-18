@@ -25,7 +25,8 @@ exports.init = function () {
 				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles"),
 				memoryUrlInUsage: Preference.get("memoryUrlInUsage"),
 				panelWidth: Preference.get("panelWidth"),
-				panelHeight: Preference.get("panelHeight")
+				panelHeight: Preference.get("panelHeight"),
+				graphType: Preference.get("graphType")
 			});
 
 			panel.port.emit("stats", stats);
@@ -84,6 +85,10 @@ exports.init = function () {
 		panel.resize(
 			parseInt(Preference.get("panelWidth")),
 			parseInt(Preference.get("panelHeight")));
+	});
+
+	panel.port.on("graphTypeSetting", function (value) {
+		Preference.set('graphType', parseInt(value));
 	});
 };
 

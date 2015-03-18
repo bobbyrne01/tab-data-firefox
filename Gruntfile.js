@@ -48,6 +48,7 @@ module.exports = function (grunt) {
 			options: {
 				stoponerror: false,
 				reset: true,
+				relaxerror: ['Empty heading.'] // localization id placed as attribute to heading
 			},
 			files: {
 				src: ['addon/data/html/*.html']

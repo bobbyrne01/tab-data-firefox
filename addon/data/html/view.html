@@ -68,82 +68,101 @@
 			<label class="tabLabel" for="tab-4" data-l10n-id="settingsLabel"></label>
 			<div class="content">
 				<div id="settingsView">
-					<div id="settings">
-						<table>
-							<tr>
-								<td>
-									<label data-l10n-id="memoryTracking_title"></label>
-								</td>
-								<td>
-									<input id="memoryTrackingPref" type="checkbox" />
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label data-l10n-id="memoryInterval_title"></label>
-								</td>
-								<td>
-									<input id="memoryIntervalPref" type="number" />
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label data-l10n-id="memoryUsageOnTabTitlesPref_title"></label>
-								</td>
-								<td>
-									<select id="memoryUsageOnTabTitlesPref">
-										<option value="0">Prepend</option>
-										<option value="1">Append</option>
-										<option value="2">Disable</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label data-l10n-id="memoryFormat_title"></label>
-								</td>
-								<td>
-									<select id="memoryFormat">
-										<option value="0">JSON</option>
-										<option value="1">Plain</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label data-l10n-id="showUrl_title"></label>
-								</td>
-								<td>
-									<input id="memoryUrlInUsage" type="checkbox" />
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label data-l10n-id="garbageCollection_title"></label>
-								</td>
-								<td>
-									<button id="schedulePreciseGC" data-l10n-id="run_title"></button>
-									<label id="schedulePreciseGCStatus" style="display: none;">&#10004;</label>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label data-l10n-id="panelWidth_title"></label>
-								</td>
-								<td>
-									<input id="panelWidth" type="number" />
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label data-l10n-id="panelHeight_title"></label>
-								</td>
-								<td>
-									<input id="panelHeight" type="number" />
-								</td>
-							</tr>
-						</table>
-					</div>
+					<h3 data-l10n-id="behaviour_title"></h3>
+					<table>
+						<tr>
+							<td>
+								<label data-l10n-id="memoryTracking_title"></label>
+							</td>
+							<td>
+								<input id="memoryTrackingPref" type="checkbox" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label data-l10n-id="memoryInterval_title"></label>
+							</td>
+							<td>
+								<input id="memoryIntervalPref" type="number" />
+							</td>
+						</tr>
+					</table>
+
+					<h3 data-l10n-id="ui_title"></h3>
+					<table>
+						<tr>
+							<td>
+								<label data-l10n-id="memoryUsageOnTabTitlesPref_title"></label>
+							</td>
+							<td>
+								<select id="memoryUsageOnTabTitlesPref">
+									<option value="0">Prepend</option>
+									<option value="1">Append</option>
+									<option value="2">Disable</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label data-l10n-id="memoryFormat_title"></label>
+							</td>
+							<td>
+								<select id="memoryFormat">
+									<option value="0">JSON</option>
+									<option value="1">Plain</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label data-l10n-id="showUrl_title"></label>
+							</td>
+							<td>
+								<input id="memoryUrlInUsage" type="checkbox" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label data-l10n-id="panelWidth_title"></label>
+							</td>
+							<td>
+								<input id="panelWidth" type="number" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label data-l10n-id="panelHeight_title"></label>
+							</td>
+							<td>
+								<input id="panelHeight" type="number" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label data-l10n-id="graphType_title"></label>
+							</td>
+							<td>
+								<select id="graphType">
+									<option value="0">Line</option>
+									<option value="1">Bar</option>
+									<option value="2">Radar</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+
+					<h3 data-l10n-id="tasks_title"></h3>
+					<table>
+						<tr>
+							<td>
+								<label data-l10n-id="garbageCollection_title"></label>
+							</td>
+							<td>
+								<button id="schedulePreciseGC" data-l10n-id="run_title"></button>
+								<label id="schedulePreciseGCStatus" style="display: none;">&#10004;</label>
+							</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 		</div>
