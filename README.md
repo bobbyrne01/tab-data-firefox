@@ -17,7 +17,8 @@ Provides user with tab related stats/data
 * Preference to include url on memory usage panel UI
 * Prepend, append or disable tab memory usage in title
 * Preference to set interval between memory usage collection
-* Top 5 memory consumers drawn on line chart 
+* Top 5 memory consumers drawn on graph
+* Graph types include: Line, Bar and Radar
 * Perform a garbage collection
 * Resize panel UI
 
@@ -62,3 +63,7 @@ Measurements use bytes as their unit and the value of each leaf node is the sum 
 ### Package
 
     rob@work:~/git/tab-data-firefox/addon$ ~/apps/addon-sdk-1.17/bin/cfx xpi
+
+### Attribution
+
+Charts are drawn using [Chart.js](https://github.com/nnnick/Chart.js)
