@@ -14,6 +14,7 @@ document.getElementById('memoryTrackingPref').addEventListener("change", functio
 		self.port.emit("memoryTrackingSetting", true);
 		document.getElementById('memoryIntervalPref').disabled = false;
 		document.getElementById('memoryUsageOnTabTitlesPref').disabled = false;
+		document.getElementById('memoryFormat').disabled = false;
 		document.getElementById('memoryUrlInUsage').disabled = false;
 
 	} else {
@@ -21,6 +22,7 @@ document.getElementById('memoryTrackingPref').addEventListener("change", functio
 		self.port.emit("memoryTrackingSetting", false);
 		document.getElementById('memoryIntervalPref').disabled = true;
 		document.getElementById('memoryUsageOnTabTitlesPref').disabled = true;
+		document.getElementById('memoryFormat').disabled = true;
 		document.getElementById('memoryUrlInUsage').disabled = true;
 
 		document.getElementById("memoryDump").textContent = '';
