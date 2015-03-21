@@ -18,7 +18,7 @@ Provides user with tab related stats/data
 * Prepend, append or disable tab memory usage in title
 * Preference to set interval between memory usage collection
 * Top 5 memory consumers drawn on graph
-* Graph types include: Line, Bar and Radar
+* Graph types include: Line, Bar, Radar and PolarArea
 * Perform a garbage collection
 * Resize panel UI
 
