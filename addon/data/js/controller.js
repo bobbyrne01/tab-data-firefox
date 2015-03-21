@@ -223,6 +223,22 @@ function updateCanvas(graphData) {
 	} else if (parseInt(document.getElementById("graphType").value) === 2) {
 
 		myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).Radar(graphData, options);
+
+	} else if (parseInt(document.getElementById("graphType").value) === 3) {
+
+		var data = [];
+
+		// reformat data for Polar area chart
+		for (var i = 0; i < graphData.datasets.length; i++) {
+			data.push({
+				value: graphData.datasets[i].data[graphData.datasets[i].data.length - 1],
+				color: graphData.datasets[i].strokeColor,
+				highlight: graphData.datasets[i].fillColor,
+				label: graphData.datasets[i].label
+			});
+		}
+
+		myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).PolarArea(data, options);
 	}
 
 	// clear previous legend
@@ -231,16 +247,16 @@ function updateCanvas(graphData) {
 	// create legend
 	var ul = document.createElement('ul');
 
-	for (var i = 0; i < graphData.datasets.length; i++) {
+	for (var j = 0; j < graphData.datasets.length; j++) {
 
 		var li = document.createElement('li'),
 			label = document.createElement('label');
 
 		ul.appendChild(li);
 
-		label.appendChild(document.createTextNode(graphData.datasets[i].data[4] + ': ' + graphData.datasets[i].label));
+		label.appendChild(document.createTextNode(graphData.datasets[j].data[4] + ': ' + graphData.datasets[j].label));
 		label.className = 'boldText';
-		label.style.color = graphData.datasets[i].strokeColor;
+		label.style.color = graphData.datasets[j].strokeColor;
 		li.appendChild(label);
 	}
 
