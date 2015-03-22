@@ -7,54 +7,28 @@ var data = {
 /*
  * Event listeners
  */
-document.getElementById('memoryTrackingPref').addEventListener("change", function (event) {
+document.getElementById('memoryTracking').addEventListener("change", function (event) {
 
-	if (document.getElementById('memoryTrackingPref').checked) {
+	if (document.getElementById('memoryTracking').checked) {
 
-		self.port.emit("memoryTrackingSetting", true);
-		document.getElementById('memoryIntervalPref').disabled = false;
-		document.getElementById('memoryUsageOnTabTitlesPref').disabled = false;
+		self.port.emit("memoryTracking", true);
+		document.getElementById('memoryInterval').disabled = false;
+		document.getElementById('memoryUsageOnTabTitles').disabled = false;
 		document.getElementById('memoryFormat').disabled = false;
 		document.getElementById('memoryUrlInUsage').disabled = false;
+		document.getElementById('graphType').disabled = false;
 
 	} else {
 
-		self.port.emit("memoryTrackingSetting", false);
-		document.getElementById('memoryIntervalPref').disabled = true;
-		document.getElementById('memoryUsageOnTabTitlesPref').disabled = true;
+		self.port.emit("memoryTracking", false);
+		document.getElementById('memoryInterval').disabled = true;
+		document.getElementById('memoryUsageOnTabTitles').disabled = true;
 		document.getElementById('memoryFormat').disabled = true;
 		document.getElementById('memoryUrlInUsage').disabled = true;
+		document.getElementById('graphType').disabled = true;
 
 		document.getElementById("memoryDump").textContent = '';
 	}
-}, false);
-
-document.getElementById('memoryIntervalPref').onkeyup = function (event) {
-
-	if (document.getElementById('memoryIntervalPref').value >= 1) {
-
-		self.port.emit("memoryIntervalSetting", document.getElementById('memoryIntervalPref').value);
-		document.getElementById('memoryIntervalPref').className = 'green';
-
-	} else {
-
-		document.getElementById('memoryIntervalPref').className = 'red';
-	}
-};
-
-document.getElementById('memoryFormat').addEventListener("change", function (event) {
-
-	self.port.emit("memoryFormatSetting", document.getElementById('memoryFormat').value);
-}, false);
-
-document.getElementById('memoryUsageOnTabTitlesPref').addEventListener("change", function (event) {
-
-	self.port.emit("memoryUsageOnTabTitlesSetting", document.getElementById('memoryUsageOnTabTitlesPref').value);
-}, false);
-
-document.getElementById('memoryUrlInUsage').addEventListener("change", function (event) {
-
-	self.port.emit("memoryUrlInUsageSetting", document.getElementById('memoryUrlInUsage').checked);
 }, false);
 
 document.getElementById('schedulePreciseGC').addEventListener("click", function (event) {
@@ -62,38 +36,13 @@ document.getElementById('schedulePreciseGC').addEventListener("click", function 
 	self.port.emit("schedulePreciseGC", '');
 }, false);
 
-document.getElementById('panelWidth').onkeyup = function (event) {
-
-	if (document.getElementById('panelWidth').value >= 1) {
-
-		self.port.emit("panelWidth", document.getElementById('panelWidth').value);
-		document.getElementById('panelWidth').className = 'green';
-		document.getElementById("canvas").width = document.getElementById('panelWidth').value - 45;
-
-	} else {
-
-		document.getElementById('panelWidth').className = 'red';
-	}
-};
-
-document.getElementById('panelHeight').onkeyup = function (event) {
-
-	if (document.getElementById('panelHeight').value >= 1) {
-
-		self.port.emit("panelHeight", document.getElementById('panelHeight').value);
-		document.getElementById('panelHeight').className = 'green';
-		document.getElementById("canvas").height = document.getElementById('panelHeight').value - 185;
-
-	} else {
-
-		document.getElementById('panelHeight').className = 'red';
-	}
-};
-
-document.getElementById('graphType').addEventListener("change", function (event) {
-
-	self.port.emit("graphTypeSetting", document.getElementById('graphType').value);
-}, false);
+tabdata_helper.inputValueChanged('panelHeight', 185);
+tabdata_helper.inputValueChanged('panelWidth', 45);
+tabdata_helper.inputValueChanged('memoryInterval', 0);
+tabdata_helper.emitCheckedOnChange('memoryUrlInUsage');
+tabdata_helper.emitValueOnChange('memoryFormat');
+tabdata_helper.emitValueOnChange('memoryUsageOnTabTitles');
+tabdata_helper.emitValueOnChange('graphType');
 
 
 
@@ -106,22 +55,21 @@ self.port.on("stats", function (stats) {
 	document.getElementById("globalCount").value = parsedStats.globalCount;
 	document.getElementById("sessionCount").value = parsedStats.sessionCount;
 	document.getElementById("currentCount").value = parsedStats.currentCount;
-	document.getElementById("memoryTrackingPref").checked = parsedStats.memoryTracking;
-	document.getElementById("memoryIntervalPref").value = parsedStats.memoryInterval;
-	document.getElementById("memoryUsageOnTabTitlesPref").value = parsedStats.memoryUsageOnTabTitles;
+	document.getElementById("memoryTracking").checked = parsedStats.memoryTracking;
+	document.getElementById("memoryInterval").value = parsedStats.memoryInterval;
+	document.getElementById("memoryUsageOnTabTitles").value = parsedStats.memoryUsageOnTabTitles;
 	document.getElementById("memoryFormat").value = parsedStats.memoryFormat;
 	document.getElementById("memoryUrlInUsage").checked = parsedStats.memoryUrlInUsage;
 	document.getElementById("panelWidth").value = parsedStats.panelWidth;
 	document.getElementById("panelHeight").value = parsedStats.panelHeight;
 	document.getElementById("graphType").value = parsedStats.graphType;
-
 	document.getElementById("canvas").width = parsedStats.panelWidth - 45;
 	document.getElementById("canvas").height = parsedStats.panelHeight - 185;
 });
 
 self.port.on("memoryDump", function (value) {
 
-	var dump = JSON.parse(value).memoryDump;
+	var dumps = JSON.parse(value).memoryDump;
 	var graphData = JSON.parse(value).graphData;
 	document.getElementById("memoryDump").textContent = '';
 
@@ -133,8 +81,8 @@ self.port.on("memoryDump", function (value) {
 
 		if (!document.getElementById("memoryUrlInUsage").checked) { // remove Url from each object
 
-			for (var i = 0; i < dump.length; i++) {
-				delete dump[i].Url;
+			for (var i = 0; i < dumps.length; i++) {
+				delete dumps[i].Url;
 			}
 		}
 
@@ -142,12 +90,11 @@ self.port.on("memoryDump", function (value) {
 
 			document.getElementById("memoryDump").appendChild(pre);
 
-			var highlightedJson = syntaxHighlight(JSON.stringify(dump, undefined, 4)),
+			var highlightedJson = syntaxHighlight(JSON.stringify(dumps, undefined, 4)),
 				range = document.createRange();
 
 			range.selectNode(pre);
 			var docFrag = range.createContextualFragment(highlightedJson);
-
 			pre.appendChild(docFrag);
 
 		} catch (e) {
@@ -157,12 +104,12 @@ self.port.on("memoryDump", function (value) {
 
 	} else { // Plain
 
-		for (var j = 0; j < dump.length; j++) {
+		for (var b = 0; b < dumps.length; b++) {
 
-			var string = dump[j].Memory + ': ' + dump[j].Title;
+			var string = dumps[b].Memory + ': ' + dumps[b].Title;
 
 			if (document.getElementById("memoryUrlInUsage").checked) {
-				string += ': ' + dump[j].Url;
+				string += ': ' + dumps[b].Url;
 			}
 
 			document.getElementById("memoryDump").appendChild(document.createTextNode(string));
@@ -186,22 +133,23 @@ function syntaxHighlight(json) {
 	var jsonElements;
 
 	json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-	return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+	return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+		function (match) {
 
-		var cls = 'number';
-		if (/^"/.test(match)) {
-			if (/:$/.test(match)) {
-				cls = 'key';
-			} else {
-				cls = 'string';
+			var cls = 'number';
+			if (/^"/.test(match)) {
+				if (/:$/.test(match)) {
+					cls = 'key';
+				} else {
+					cls = 'string';
+				}
+			} else if (/true|false/.test(match)) {
+				cls = 'boolean';
+			} else if (/null/.test(match)) {
+				cls = 'null';
 			}
-		} else if (/true|false/.test(match)) {
-			cls = 'boolean';
-		} else if (/null/.test(match)) {
-			cls = 'null';
-		}
-		return '<span class="' + cls + '">' + match + '</span>';
-	});
+			return '<span class="' + cls + '">' + match + '</span>';
+		});
 }
 
 function updateCanvas(graphData) {
@@ -231,34 +179,32 @@ function updateCanvas(graphData) {
 		var data = [];
 
 		// reformat data for Polar area chart
-		for (var i = 0; i < graphData.datasets.length; i++) {
+		for (var n = 0; n < graphData.datasets.length; n++) {
 			data.push({
-				value: graphData.datasets[i].data[graphData.datasets[i].data.length - 1],
-				color: graphData.datasets[i].strokeColor,
-				highlight: graphData.datasets[i].fillColor,
-				label: graphData.datasets[i].label
+				value: graphData.datasets[n].data[graphData.datasets[n].data.length - 1],
+				color: graphData.datasets[n].strokeColor,
+				highlight: graphData.datasets[n].fillColor,
+				label: graphData.datasets[n].label
 			});
 		}
 
 		myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).PolarArea(data, options);
 	}
 
-	// clear previous legend
+	// draw legend
 	document.getElementById('legend').textContent = '';
-
-	// create legend
 	var ul = document.createElement('ul');
 
-	for (var j = 0; j < graphData.datasets.length; j++) {
+	for (var m = 0; m < graphData.datasets.length; m++) {
 
 		var li = document.createElement('li'),
 			label = document.createElement('label');
 
 		ul.appendChild(li);
 
-		label.appendChild(document.createTextNode(graphData.datasets[j].data[4] + ': ' + graphData.datasets[j].label));
+		label.appendChild(document.createTextNode(graphData.datasets[m].data[4] + ': ' + graphData.datasets[m].label));
 		label.className = 'boldText';
-		label.style.color = graphData.datasets[j].strokeColor;
+		label.style.color = graphData.datasets[m].strokeColor;
 		li.appendChild(label);
 	}
 

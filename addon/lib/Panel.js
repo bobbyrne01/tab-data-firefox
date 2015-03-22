@@ -12,7 +12,11 @@ exports.init = function () {
 		width: parseInt(Preference.get("panelWidth")),
 		height: parseInt(Preference.get("panelHeight")),
 		contentURL: Data.get("html/view.html"),
-		contentScriptFile: [Data.get("bower_components/Chart.js/Chart.min.js"), Data.get("js/controller.js")],
+		contentScriptFile: [
+			Data.get("bower_components/Chart.js/Chart.min.js"),
+			Data.get("js/helper.js"),
+			Data.get("js/controller.js")
+		],
 		onShow: function () {
 
 			var stats = JSON.stringify({
@@ -38,7 +42,7 @@ exports.init = function () {
 		}
 	});
 
-	panel.port.on("memoryTrackingSetting", function (value) {
+	panel.port.on("memoryTracking", function (value) {
 		Preference.set('memoryTracking', value);
 
 		if (!Preference.get('memoryTracking')) {
@@ -47,23 +51,23 @@ exports.init = function () {
 		}
 	});
 
-	panel.port.on("memoryIntervalSetting", function (value) {
+	panel.port.on("memoryInterval", function (value) {
 		Preference.set('memoryInterval', value);
 		Tab.removeScheduledFunction();
 		Tab.reinitTimeout();
 	});
 
-	panel.port.on("memoryUsageOnTabTitlesSetting", function (value) {
+	panel.port.on("memoryUsageOnTabTitles", function (value) {
 		Preference.set('memoryUsageOnTabTitles', parseInt(value));
 	});
 
-	panel.port.on("memoryFormatSetting", function (value) {
+	panel.port.on("memoryFormat", function (value) {
 		Preference.set('memoryFormat', parseInt(value));
 		Tab.removeScheduledFunction();
 		Tab.updateMemoryCounters();
 	});
 
-	panel.port.on("memoryUrlInUsageSetting", function (value) {
+	panel.port.on("memoryUrlInUsage", function (value) {
 		Preference.set('memoryUrlInUsage', value);
 		Tab.removeScheduledFunction();
 		Tab.updateMemoryCounters();
@@ -87,7 +91,7 @@ exports.init = function () {
 			parseInt(Preference.get("panelHeight")));
 	});
 
-	panel.port.on("graphTypeSetting", function (value) {
+	panel.port.on("graphType", function (value) {
 		Preference.set('graphType', parseInt(value));
 	});
 };

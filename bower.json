@@ -1,21 +1,21 @@
 {
-  "name": "tab-data-firefox",
-  "version": "0.4.5",
-  "homepage": "https://github.com/bobbyrne01/tab-data-firefox",
-  "authors": [
-    "Robert Byrne"
-  ],
-  "description": "Firefox addon providing user with tab related stats/data",
-  "main": "addon/lib/main.js",
-  "keywords": [
-    "firefox",
-    "tab",
-    "memory",
-    "count"
-  ],
-  "license": "GNU GPL v3",
-  "private": true,
-  "dependencies": {
-    "Chart.js": "~1.0.1"
-  }
+	"name": "tab-data-firefox",
+	"version": "0.4.5",
+	"homepage": "https://github.com/bobbyrne01/tab-data-firefox",
+	"authors": [
+		"Robert Byrne"
+	],
+	"description": "Firefox addon providing user with tab related stats/data",
+	"main": "addon/lib/main.js",
+	"keywords": [
+		"firefox",
+		"tab",
+		"memory",
+		"count"
+	],
+	"license": "GNU GPL v3",
+	"private": true,
+	"dependencies": {
+		"Chart.js": "~1.0.1"
+	}
 }
