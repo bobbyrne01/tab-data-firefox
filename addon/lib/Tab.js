@@ -3,6 +3,7 @@ var tabs = require("sdk/tabs"),
 	Preference = require("./Preference"),
 	Panel = require("./Panel"),
 	Chrome = require("./Chrome"),
+	WindowUtils = require("./WindowUtils"),
 	sessionCount = 0,
 	currentCount = 0,
 	markedTabs = [],
@@ -243,9 +244,14 @@ function initFinishReporting() {
 
 				if (repl.indexOf(tab.url) >= 0) {
 
-					/*if (JSON.parse(markedTabs[j]).amount >= (Preference.get('memoryCautionThreshold') * 1000000)) {
-						console.log('CAUTION! ' + tab.title + ': ' + JSON.parse(markedTabs[j]).amount);
-					}*/
+					if (JSON.parse(markedTabs[j]).amount >= (Preference.get('memoryCautionThreshold') * 1000000)) {
+
+						styleTab(repl, 'red');
+
+					} else {
+
+						styleTab(repl, '');
+					}
 
 					// format data for panel
 					memoryDump.push({
@@ -376,4 +382,26 @@ function initFinishReporting() {
 
 		Panel.get().port.emit("memoryDump", payload);
 	};
+}
+
+function styleTab(currentUrl, color) {
+
+	var allWindows = WindowUtils.getWindows();
+
+	for (var h = 0; h < allWindows.length; h++) { // loop all windows
+
+		if (allWindows[h].gBrowser && allWindows[h].gBrowser.tabContainer) {
+			var browserTabs = allWindows[h].gBrowser.tabContainer.childNodes;
+
+			for (var q = 0; q < browserTabs.length; q++) { // loop all tabs within window
+
+				var browser = allWindows[h].gBrowser.getBrowserForTab(browserTabs[q]);
+
+				if (currentUrl === browser.currentURI.spec) {
+
+					browserTabs[q].style.color = color;
+				}
+			}
+		}
+	}
 }

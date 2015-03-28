@@ -52,6 +52,11 @@
 		"type": "bool",
 		"value": true
 	}, {
+		"name": "memoryCautionThreshold",
+		"title": "Memory caution threshold? (In megabytes)?",
+		"type": "string",
+		"value": "20"
+	}, {
 		"name": "panelWidth",
 		"title": "Width of Panel UI",
 		"type": "string",
@@ -60,7 +65,7 @@
 		"name": "panelHeight",
 		"title": "Height of Panel UI",
 		"type": "string",
-		"value": "500"
+		"value": "525"
 	}, {
 		"name": "graphType",
 		"title": "Graph type?",

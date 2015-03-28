@@ -16,6 +16,7 @@ Provides user with tab related stats/data
 * Memory usage displayed on panel UI (JSON or Plain)
 * Preference to include url on memory usage panel UI
 * Prepend, append or disable tab memory usage in title
+* Change tab title color if memory exceeds specified threshold
 * Preference to set interval between memory usage collection
 * Top 5 memory consumers drawn on graph
 * Graph types include: Line, Bar, Radar and PolarArea

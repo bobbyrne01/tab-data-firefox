@@ -28,6 +28,7 @@ exports.init = function () {
 				memoryFormat: Preference.get("memoryFormat"),
 				memoryUsageOnTabTitles: Preference.get("memoryUsageOnTabTitles"),
 				memoryUrlInUsage: Preference.get("memoryUrlInUsage"),
+				memoryCautionThreshold: Preference.get("memoryCautionThreshold"),
 				panelWidth: Preference.get("panelWidth"),
 				panelHeight: Preference.get("panelHeight"),
 				graphType: Preference.get("graphType")
@@ -71,6 +72,10 @@ exports.init = function () {
 		Preference.set('memoryUrlInUsage', value);
 		Tab.removeScheduledFunction();
 		Tab.updateMemoryCounters();
+	});
+
+	panel.port.on("memoryCautionThreshold", function (value) {
+		Preference.set('memoryCautionThreshold', value);
 	});
 
 	panel.port.on("schedulePreciseGC", function (value) {

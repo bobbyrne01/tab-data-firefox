@@ -16,6 +16,7 @@ document.getElementById('memoryTracking').addEventListener("change", function (e
 		document.getElementById('memoryUsageOnTabTitles').disabled = false;
 		document.getElementById('memoryFormat').disabled = false;
 		document.getElementById('memoryUrlInUsage').disabled = false;
+		document.getElementById('memoryCautionThreshold').disabled = false;
 		document.getElementById('graphType').disabled = false;
 
 	} else {
@@ -25,6 +26,7 @@ document.getElementById('memoryTracking').addEventListener("change", function (e
 		document.getElementById('memoryUsageOnTabTitles').disabled = true;
 		document.getElementById('memoryFormat').disabled = true;
 		document.getElementById('memoryUrlInUsage').disabled = true;
+		document.getElementById('memoryCautionThreshold').disabled = true;
 		document.getElementById('graphType').disabled = true;
 
 		document.getElementById("memoryDump").textContent = '';
@@ -35,6 +37,15 @@ document.getElementById('schedulePreciseGC').addEventListener("click", function 
 	document.getElementById('schedulePreciseGC').disabled = true;
 	self.port.emit("schedulePreciseGC", '');
 }, false);
+
+document.getElementById('memoryCautionThreshold').onkeyup = function (event) {
+	if (parseInt(document.getElementById('memoryCautionThreshold').value) >= 0) {
+		self.port.emit("memoryCautionThreshold", document.getElementById('memoryCautionThreshold').value);
+		document.getElementById('memoryCautionThreshold').className = 'green';
+	} else {
+		document.getElementById('memoryCautionThreshold').className = 'red';
+	}
+};
 
 tabdata_helper.inputValueChanged('panelHeight', 185);
 tabdata_helper.inputValueChanged('panelWidth', 45);
@@ -60,6 +71,7 @@ self.port.on("stats", function (stats) {
 	document.getElementById("memoryUsageOnTabTitles").value = parsedStats.memoryUsageOnTabTitles;
 	document.getElementById("memoryFormat").value = parsedStats.memoryFormat;
 	document.getElementById("memoryUrlInUsage").checked = parsedStats.memoryUrlInUsage;
+	document.getElementById("memoryCautionThreshold").value = parsedStats.memoryCautionThreshold;
 	document.getElementById("panelWidth").value = parsedStats.panelWidth;
 	document.getElementById("panelHeight").value = parsedStats.panelHeight;
 	document.getElementById("graphType").value = parsedStats.graphType;
