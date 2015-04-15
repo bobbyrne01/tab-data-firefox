@@ -4,6 +4,7 @@ var tabs = require("sdk/tabs"),
 	Panel = require("./Panel"),
 	Chrome = require("./Chrome"),
 	WindowUtils = require("./WindowUtils"),
+	Button = require("./ToggleButton"),
 	sessionCount = 0,
 	currentCount = 0,
 	markedTabs = [],
@@ -151,6 +152,9 @@ function bytesToSize(bytes) {
 }
 
 function updateMemoryCounters() {
+
+	Button.get().badgeColor = "#99FF66";
+
 	markedTabs = []; // reset memory counts
 	memoryReporterManager.getReports(handleReport, null, finishReporting, null, false);
 
@@ -379,6 +383,8 @@ function initFinishReporting() {
 			memoryDump: memoryDump,
 			graphData: JSON.stringify(graphData)
 		});
+
+		Button.get().badgeColor = "#FF5050";
 
 		Panel.get().port.emit("memoryDump", payload);
 	};

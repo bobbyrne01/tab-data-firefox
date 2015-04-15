@@ -11,7 +11,9 @@ exports.init = function () {
 		id: "tab-data-widget",
 		label: 'Tab Data',
 		icon: Data.get("images/tabs-64.png"),
-		onChange: handleChange
+		onChange: handleChange,
+		badgeColor: "#FF5050",
+		badge: '.'
 	});
 };
 
