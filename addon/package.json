@@ -1,11 +1,12 @@
 {
 	"name": "tab-data-addon",
 	"title": "Tab Data",
-	"id": "jid1-4ogjq7MUzAiCOw",
+	"id": "jid1-4ogjq7MUzAiCOw@jetpack",
 	"description": "Provides user with tab related stats/data",
 	"author": "Robert Byrne",
 	"license": "GNU GPL v3",
 	"version": "0.5.7",
+	"main": "lib/main.js",
 	"permissions": {
 		"private-browsing": true
 	},

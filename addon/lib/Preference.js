@@ -1,5 +1,5 @@
 var preference = require("sdk/simple-prefs"),
-	Tab = require("Tab");
+	Tab = require("./Tab");
 
 /*
  * preference listeners
