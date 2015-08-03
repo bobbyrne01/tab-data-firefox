@@ -59,11 +59,11 @@ Measurements use bytes as their unit and the value of each leaf node is the sum 
 ### Run
 
     rob@work:~/git/tab-data-firefox$ cd addon/
-    rob@work:~/git/tab-data-firefox/addon$ ~/apps/addon-sdk-1.17/bin/cfx run
+    rob@work:~/git/tab-data-firefox/addon$ jpm run
 
 ### Package
 
-    rob@work:~/git/tab-data-firefox/addon$ ~/apps/addon-sdk-1.17/bin/cfx xpi
+    rob@work:~/git/tab-data-firefox/addon$ jpm xpi
 
 ### Attribution
 
