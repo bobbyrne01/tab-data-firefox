@@ -1,5 +1,7 @@
 var {
-	Cc, Ci, Cu
+	Cc,
+	Ci,
+	Cu
 } = require("chrome");
 
 exports.initMemoryReporterManager = function () {
