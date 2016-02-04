@@ -201,6 +201,9 @@ function updateCanvas(graphData) {
 		}
 
 		myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).PolarArea(data, options);
+	
+	}else{
+		myNewChart.destroy();
 	}
 
 	// draw legend

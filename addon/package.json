@@ -81,6 +81,12 @@
 		}, {
 			"value": "2",
 			"label": "Radar"
+		}, {
+			"value": "3",
+			"label": "PolarArea"
+		}, {
+			"value": "4",
+			"label": "None"
 		}]
 	}]
 }
