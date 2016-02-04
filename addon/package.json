@@ -5,7 +5,7 @@
 	"description": "Provides user with tab related stats/data",
 	"author": "Robert Byrne",
 	"license": "GNU GPL v3",
-	"version": "0.5.8",
+	"version": "0.5.9",
 	"main": "lib/main.js",
 	"permissions": {
 		"private-browsing": true
