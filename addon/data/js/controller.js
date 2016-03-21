@@ -38,6 +38,11 @@ document.getElementById('schedulePreciseGC').addEventListener("click", function 
 	self.port.emit("schedulePreciseGC", '');
 }, false);
 
+document.getElementById('getMemoryUsage').addEventListener("click", function (event) {
+	document.getElementById('getMemoryUsage').disabled = true;
+	self.port.emit("getMemoryUsage", '');
+}, false);
+
 document.getElementById('memoryCautionThreshold').onkeyup = function (event) {
 	if (parseInt(document.getElementById('memoryCautionThreshold').value) >= 0) {
 		self.port.emit("memoryCautionThreshold", document.getElementById('memoryCautionThreshold').value);
@@ -138,6 +143,14 @@ self.port.on("schedulePreciseGC", function (value) {
 	}, 5000);
 });
 
+self.port.on("getMemoryUsage", function (value) {
+	document.getElementById('getMemoryUsageStatus').style.display = 'inline';
+	document.getElementById('getMemoryUsage').disabled = false;
+	setTimeout(function () {
+		document.getElementById('getMemoryUsageStatus').style.display = 'none';
+	}, 5000);
+});
+
 
 //Taken from: http://stackoverflow.com/a/7220510
 function syntaxHighlight(json) {
@@ -201,7 +214,7 @@ function updateCanvas(graphData) {
 		}
 
 		myNewChart = new Chart(document.getElementById("canvas").getContext("2d")).PolarArea(data, options);
-	
+
 	}else{
 		myNewChart.destroy();
 	}

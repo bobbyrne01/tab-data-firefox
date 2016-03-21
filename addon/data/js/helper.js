@@ -1,14 +1,12 @@
 var tabdata_helper = {
 
 	emitValueOnChange: function (id) {
-
 		document.getElementById(id).addEventListener("change", function (event) {
 			self.port.emit(id, document.getElementById(id).value);
 		}, false);
 	},
 
 	emitCheckedOnChange: function (id) {
-
 		document.getElementById(id).addEventListener("change", function (event) {
 			self.port.emit(id, document.getElementById(id).checked);
 		}, false);
@@ -28,7 +26,6 @@ var tabdata_helper = {
 				}
 
 			} else {
-
 				document.getElementById(id).className = 'red';
 			}
 		};

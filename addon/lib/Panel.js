@@ -82,6 +82,13 @@ exports.init = function () {
 		Chrome.gc(panel);
 	});
 
+	panel.port.on("getMemoryUsage", function (value) {
+		Tab.removeScheduledFunction();
+		Tab.reinitTimeout();
+		Tab.updateMemoryCounters();
+		panel.port.emit('getMemoryUsage', '');
+	});
+
 	panel.port.on("panelWidth", function (value) {
 		Preference.set('panelWidth', value);
 		panel.resize(

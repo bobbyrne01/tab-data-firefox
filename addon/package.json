@@ -5,7 +5,7 @@
 	"description": "Provides user with tab related stats/data",
 	"author": "Robert Byrne",
 	"license": "GNU GPL v3",
-	"version": "0.5.9",
+	"version": "0.5.10",
 	"main": "lib/main.js",
 	"permissions": {
 		"private-browsing": true
@@ -66,7 +66,7 @@
 		"name": "panelHeight",
 		"title": "Height of Panel UI",
 		"type": "string",
-		"value": "525"
+		"value": "550"
 	}, {
 		"name": "graphType",
 		"title": "Graph type?",
